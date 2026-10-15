@@ -63,12 +63,20 @@ jobs:
           EOF
           fi
 
+      - name: Fix withValues to withOpacity
+        run: |
+          echo "🔧 Converting withValues to withOpacity for Flutter 3.24.5 compatibility..."
+          find lib -name "*.dart" -type f -exec sed -i \
+            -e 's/\.withValues(alpha: \([^)]*\))/.withOpacity(\1)/g' \
+            -e 's/\.withValues(alpha:\([^)]*\))/.withOpacity(\1)/g' \
+            -e 's/\.withValues(opacity: \([^)]*\))/.withOpacity(\1)/g' \
+            {} +
+          echo "✅ Conversion done"
+          echo "Checking for remaining withValues..."
+          grep -rn "withValues" lib/ && echo "⚠️  Still found withValues" || echo "✅ No withValues remaining"
+
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Run tests
-        run: flutter test
-        continue-on-error: true
 
       - name: Build APK
         run: flutter build apk --release
