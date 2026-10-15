@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 /// نطاق التطبيق
 enum ApplyScope {
-  single,    // زر فردي
-  group,     // مجموعة
-  all,       // كل الأزرار
+  single,
+  group,
+  all,
 }
 
 extension ApplyScopeExt on ApplyScope {
@@ -36,7 +36,7 @@ class KeyConfig {
   final String id;
 
   // الأبعاد
-  final double width;       // بالبكسل
+  final double width;
   final double height;
   final double minWidth;
   final double maxWidth;
@@ -55,7 +55,7 @@ class KeyConfig {
 
   // الزوايا والاستدارة
   final double borderRadius;
-  final double roundedness;   // للشكل
+  final double roundedness;
 
   // الحدود
   final double borderWidth;
@@ -165,7 +165,7 @@ class KeyConfig {
         'borderRadius': borderRadius,
         'roundedness': roundedness,
         'borderWidth': borderWidth,
-        'borderColor': borderColor.toARGB32(),
+        'borderColor': borderColor.value,
         'opacity': opacity,
         'blur': blur,
         'fontSize': fontSize,
