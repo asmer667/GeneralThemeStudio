@@ -7,9 +7,9 @@ import 'package:path_provider/path_provider.dart';
 
 /// مصدر خلفيات مجاني
 enum WallpaperSource {
-  picsum,      // Lorem Picsum (بدون API key)
-  unsplash,    // Unsplash Source
-  placeholder, // Placeholder.com
+  picsum,
+  unsplash,
+  placeholder,
 }
 
 extension WallpaperSourceExt on WallpaperSource {
@@ -56,10 +56,8 @@ class OnlineWallpaper {
     this.height = 1920,
   });
 
-  /// نسبة الأبعاد
   double get aspectRatio => width / height;
 
-  /// اسم الملف المقترح
   String get suggestedName =>
       'wallpaper_${id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
 }
@@ -79,7 +77,6 @@ class WallpaperApi {
   // Fetch
   // ═══════════════════════════════════════════
 
-  /// جلب قائمة خلفيات
   static Future<List<OnlineWallpaper>> fetchWallpapers({
     WallpaperSource source = WallpaperSource.picsum,
     int count = 30,
@@ -95,7 +92,6 @@ class WallpaperApi {
     }
   }
 
-  /// Picsum Photos — API مجاني بدون key
   static Future<List<OnlineWallpaper>> _fetchPicsum({
     int count = 30,
     int page = 1,
@@ -133,11 +129,9 @@ class WallpaperApi {
     return [];
   }
 
-  /// Unsplash Source (بدون key — يعطي صورة عشوائية)
   static Future<List<OnlineWallpaper>> _fetchUnsplash({
     int count = 30,
   }) async {
-    // Unsplash Source لا يوفر قائمة — نولّد روابط عشوائية
     final result = <OnlineWallpaper>[];
     final categories = [
       'nature',
@@ -166,7 +160,6 @@ class WallpaperApi {
     return result;
   }
 
-  /// Placeholder
   static Future<List<OnlineWallpaper>> _fetchPlaceholder({
     int count = 30,
   }) async {
@@ -200,7 +193,6 @@ class WallpaperApi {
   // Download
   // ═══════════════════════════════════════════
 
-  /// تنزيل خلفية
   static Future<File?> downloadWallpaper({
     required OnlineWallpaper wallpaper,
     void Function(int received, int total)? onProgress,
@@ -231,7 +223,6 @@ class WallpaperApi {
     }
   }
 
-  /// تنزيل صورة من رابط مباشر
   static Future<File?> downloadFromUrl(String url) async {
     try {
       final appDir = await getApplicationDocumentsDirectory();
@@ -257,7 +248,6 @@ class WallpaperApi {
     }
   }
 
-  /// جلب بايتات صورة (للعرض في الذاكرة)
   static Future<Uint8List?> fetchImageBytes(String url) async {
     try {
       final response = await _dio.get(
@@ -281,15 +271,13 @@ class DownloadedWallpapers {
       final dir = Directory('${appDir.path}/wallpapers');
       if (!await dir.exists()) return [];
 
-      final files = await dir
-          .list()
+      final entities = await dir.list().toList();
+      final files = entities
+          .whereType<File>()
           .where((e) {
-            if (e is! File) return false;
             final ext = e.path.split('.').last.toLowerCase();
             return ['png', 'jpg', 'jpeg', 'webp'].contains(ext);
           })
-          .toList()
-          .cast<File>()
           .toList();
 
       files.sort((a, b) =>
