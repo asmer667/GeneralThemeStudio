@@ -101,7 +101,7 @@ class IconAsset {
         'id': id,
         'name': name,
         'type': type.name,
-        'tint': tint.toARGB32(),
+        'tint': tint.value,
         'targetDensity': targetDensity,
         'size': size,
         'materialIcon': materialIcon?.codePoint,
