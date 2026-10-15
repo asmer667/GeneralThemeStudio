@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_colors.dart';
-import '../models/apply_target.dart';
 import '../models/background_asset.dart';
 import '../providers/theme_provider.dart';
 import '../services/apply_service.dart';
 import '../widgets/background_picker.dart';
 import '../widgets/glass_card.dart';
-import '../widgets/neon_button.dart';
 import '../widgets/preview_bottom_sheet.dart';
 import 'online_wallpapers_screen.dart';
 
-/// تبويب الخلفيات — محدّث
+/// تبويب الخلفيات
 class BackgroundsTab extends StatelessWidget {
   const BackgroundsTab({super.key});
 
@@ -22,7 +20,7 @@ class BackgroundsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, provider, _) {
-        final current = provider.project.background;
+        final current = provider.project.backgroundAsset;
 
         return Column(
           children: [
@@ -62,7 +60,7 @@ class BackgroundsTab extends StatelessWidget {
                 color: current?.solidColor,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: Colors.white.withOpacity(0.2),
                   width: 1.5,
                 ),
                 boxShadow: AppColors.glow(
@@ -224,5 +222,4 @@ class BackgroundsTab extends StatelessWidget {
       ),
     );
   }
-
 }
