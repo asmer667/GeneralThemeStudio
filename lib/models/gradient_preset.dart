@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 /// نوع التدرج
@@ -14,9 +16,9 @@ class GradientPreset {
   final GradientType type;
   final List<Color> colors;
   final List<double>? stops;
-  final double angle; // للـ linear
-  final Alignment? center; // للـ radial
-  final double radius; // للـ radial
+  final double angle;
+  final Alignment? center;
+  final double radius;
 
   const GradientPreset({
     required this.id,
@@ -104,29 +106,18 @@ class GradientPreset {
   }
 
   Alignment _angleToAlignment(double angleDegrees) {
-    final rad = angleDegrees * (3.141592653589793 / 180);
+    final rad = angleDegrees * (math.pi / 180);
     return Alignment(
-      _cos(rad),
-      _sin(rad),
+      math.cos(rad),
+      math.sin(rad),
     );
-  }
-
-  double _cos(double x) {
-    // Taylor approximation
-    final x2 = x * x;
-    return 1 - x2 / 2 + x2 * x2 / 24 - x2 * x2 * x2 / 720;
-  }
-
-  double _sin(double x) {
-    final x2 = x * x;
-    return x - x2 * x / 6 + x2 * x2 * x / 120;
   }
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'type': type.name,
-        'colors': colors.map((c) => c.toARGB32()).toList(),
+        'colors': colors.map((c) => c.value).toList(),
         'stops': stops,
         'angle': angle,
         'radius': radius,
@@ -155,8 +146,8 @@ class GradientPreset {
   }
 
   static String _hex(Color c) {
-    return '#${(c.r * 255).round().toRadixString(16).padLeft(2, "0")}'
-        '${(c.g * 255).round().toRadixString(16).padLeft(2, "0")}'
-        '${(c.b * 255).round().toRadixString(16).padLeft(2, "0")}';
+    return '#${c.red.toRadixString(16).padLeft(2, "0")}'
+        '${c.green.toRadixString(16).padLeft(2, "0")}'
+        '${c.blue.toRadixString(16).padLeft(2, "0")}';
   }
 }
