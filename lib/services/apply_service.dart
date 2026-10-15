@@ -127,7 +127,6 @@ class ApplyService {
     required ApplySelection selection,
   }) {
     if (selection.target == ApplyTarget.allKeys) {
-      // كل الأزرار
       final updated = project.groups.map((g) {
         return g.copyWith(shape: shape);
       }).toList();
@@ -137,7 +136,6 @@ class ApplyService {
       );
     }
 
-    // مجموعة معينة
     final updated = project.groups.map((g) {
       if (g.selector == selection.effectiveSelector) {
         return g.copyWith(shape: shape);
@@ -157,19 +155,10 @@ class ApplyService {
     required BackgroundAsset background,
     required ApplySelection selection,
   }) {
-    switch (selection.target) {
-      case ApplyTarget.keyboardBackground:
-      case ApplyTarget.screenBackground:
-        return project.copyWith(
-          background: background,
-          updatedAt: DateTime.now(),
-        );
-      default:
-        return project.copyWith(
-          background: background,
-          updatedAt: DateTime.now(),
-        );
-    }
+    return project.copyWith(
+      backgroundAsset: background,
+      updatedAt: DateTime.now(),
+    );
   }
 
   // ═══════════════════════════════════════════
