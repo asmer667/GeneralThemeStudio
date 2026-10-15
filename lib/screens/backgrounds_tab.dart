@@ -29,7 +29,8 @@ class BackgroundsTab extends StatelessWidget {
             Expanded(
               child: BackgroundPicker(
                 selected: current,
-                onSelected: (bg) => _onBackgroundSelected(context, provider, bg),
+                onSelected: (bg) =>
+                    _onBackgroundSelected(context, provider, bg),
               ),
             ),
           ],
@@ -195,8 +196,10 @@ class BackgroundsTab extends StatelessWidget {
   Future<void> _onBackgroundSelected(
     BuildContext context,
     ThemeProvider provider,
-    BackgroundAsset bg,
+    BackgroundAsset? bg,
   ) async {
+    if (bg == null) return;
+
     final selection = await PreviewBottomSheet.show(
       context,
       itemName: bg.name,
@@ -218,7 +221,8 @@ class BackgroundsTab extends StatelessWidget {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('تم تطبيق ${bg.name} على ${selection.target.labelAr}'),
+        content:
+            Text('تم تطبيق ${bg.name} على ${selection.target.labelAr}'),
       ),
     );
   }
