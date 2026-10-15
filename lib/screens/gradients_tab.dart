@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../core/app_colors.dart';
 import '../models/gradient_preset.dart';
+import '../models/apply_target.dart';
 import '../providers/theme_provider.dart';
 import '../services/apply_service.dart';
 import '../widgets/glass_card.dart';

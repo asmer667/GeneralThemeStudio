@@ -5,6 +5,7 @@ import '../core/app_colors.dart';
 import '../core/animations.dart';
 import '../data/gradients_catalog.dart';
 import '../models/gradient_preset.dart';
+import '../models/apply_target.dart';
 import '../providers/theme_provider.dart';
 import '../services/apply_service.dart';
 import '../widgets/gradient_preview.dart';

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/app_colors.dart';
 import '../models/key_shape.dart';
 import '../models/shape_category.dart';
+import '../models/apply_target.dart';
 import '../providers/theme_provider.dart';
 import '../services/apply_service.dart';
 import '../widgets/preview_bottom_sheet.dart';
