@@ -6,18 +6,18 @@ class ColorUtils {
 
   /// تحويل لون إلى HEX (RRGGBBAA)
   static String toHex(Color color) {
-    final r = (color.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (color.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (color.b * 255).round().toRadixString(16).padLeft(2, '0');
-    final a = (color.a * 255).round().toRadixString(16).padLeft(2, '0');
+    final r = color.red.toRadixString(16).padLeft(2, '0');
+    final g = color.green.toRadixString(16).padLeft(2, '0');
+    final b = color.blue.toRadixString(16).padLeft(2, '0');
+    final a = color.alpha.toRadixString(16).padLeft(2, '0');
     return '#$r$g$b$a'.toUpperCase();
   }
 
   /// HEX بدون شفافية
   static String toHexRgb(Color color) {
-    final r = (color.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (color.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (color.b * 255).round().toRadixString(16).padLeft(2, '0');
+    final r = color.red.toRadixString(16).padLeft(2, '0');
+    final g = color.green.toRadixString(16).padLeft(2, '0');
+    final b = color.blue.toRadixString(16).padLeft(2, '0');
     return '#$r$g$b'.toUpperCase();
   }
 
@@ -57,15 +57,15 @@ class ColorUtils {
   }
 
   /// شفافية
-  static Color opaque(Color color) => color.withValues(alpha: 1.0);
+  static Color opaque(Color color) => color.withOpacity(1.0);
   static Color withAlpha(Color color, double alpha) =>
-      color.withValues(alpha: alpha);
+      color.withOpacity(alpha);
 
   /// فرق بين لونين
   static double difference(Color a, Color b) {
-    final dr = (a.r - b.r).abs();
-    final dg = (a.g - b.g).abs();
-    final db = (a.b - b.b).abs();
+    final dr = (a.red - b.red).abs() / 255.0;
+    final dg = (a.green - b.green).abs() / 255.0;
+    final db = (a.blue - b.blue).abs() / 255.0;
     return (dr + dg + db) / 3.0;
   }
 
