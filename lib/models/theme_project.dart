@@ -1,6 +1,6 @@
-import 'background_asset.dart';
 import 'package:flutter/material.dart';
 
+import 'background_asset.dart';
 import 'key_group.dart';
 
 /// المشروع الكامل — يحتوي كل بيانات ثيم واحد
@@ -71,9 +71,11 @@ class ThemeProject {
   String? fontName;
   String? fontPath;
 
-  // Background Image
+  // Background Image (asset)
   String? backgroundImagePath;
-  BackgroundAsset? background;
+
+  // Background Asset (for images/gradients)
+  BackgroundAsset? backgroundAsset;
 
   // Timestamps
   DateTime createdAt;
@@ -123,7 +125,7 @@ class ThemeProject {
     this.fontName,
     this.fontPath,
     this.backgroundImagePath,
-    this.background,
+    this.backgroundAsset,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -219,7 +221,8 @@ class ThemeProject {
     String? fontName,
     String? fontPath,
     String? backgroundImagePath,
-    BackgroundAsset? background,
+    BackgroundAsset? backgroundAsset,
+    bool clearBackgroundAsset = false,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -273,7 +276,9 @@ class ThemeProject {
       fontPath: fontPath ?? this.fontPath,
       backgroundImagePath:
           backgroundImagePath ?? this.backgroundImagePath,
-    this.background,
+      backgroundAsset: clearBackgroundAsset
+          ? null
+          : (backgroundAsset ?? this.backgroundAsset),
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -326,7 +331,7 @@ class ThemeProject {
         'fontName': fontName,
         'fontPath': fontPath,
         'backgroundImagePath': backgroundImagePath,
-        'background': background?.toJson(),
+        'backgroundAsset': backgroundAsset?.toJson(),
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };
@@ -381,8 +386,9 @@ class ThemeProject {
       fontName: json['fontName'] as String?,
       fontPath: json['fontPath'] as String?,
       backgroundImagePath: json['backgroundImagePath'] as String?,
-      background: json['background'] != null
-          ? BackgroundAsset.fromJson(json['background'] as Map<String, dynamic>)
+      backgroundAsset: json['backgroundAsset'] != null
+          ? BackgroundAsset.fromJson(
+              json['backgroundAsset'] as Map<String, dynamic>)
           : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
