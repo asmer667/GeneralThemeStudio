@@ -151,9 +151,9 @@ class BorderAsset {
         'id': id,
         'name': name,
         'shape': shape.name,
-        'backgroundTint': backgroundTint.toARGB32(),
-        'foregroundTint': foregroundTint.toARGB32(),
-        'borderColor': borderColor.toARGB32(),
+        'backgroundTint': backgroundTint.value,
+        'foregroundTint': foregroundTint.value,
+        'borderColor': borderColor.value,
         'borderWidth': borderWidth,
         'gradient': gradient?.toJson(),
         'borderGradient': borderGradient?.toJson(),
@@ -230,7 +230,7 @@ class BorderAsset {
     sb.writeln('gap = [$gapTop, $gapRight, $gapBottom, $gapLeft]');
     sb.writeln('target_density = $targetDensity');
 
-    // إذا كان هناك تدرج → أضف حقل gradient (صيغة FUTO المستقبلية)
+    // إذا كان هناك تدرج → أضف حقل gradient
     if (gradient != null) {
       final stops = gradient!.stops ?? [];
       sb.writeln(
@@ -245,10 +245,10 @@ class BorderAsset {
   }
 
   static String _hex(Color c) {
-    final r = (c.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (c.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (c.b * 255).round().toRadixString(16).padLeft(2, '0');
-    final a = (c.a * 255).round().toRadixString(16).padLeft(2, '0');
+    final r = (c.red).toRadixString(16).padLeft(2, '0');
+    final g = (c.green).toRadixString(16).padLeft(2, '0');
+    final b = (c.blue).toRadixString(16).padLeft(2, '0');
+    final a = (c.alpha).toRadixString(16).padLeft(2, '0');
     return '#$r$g$b$a'.toUpperCase();
   }
 
