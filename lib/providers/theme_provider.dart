@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
 import '../models/background_asset.dart';
 import '../models/border_asset.dart';
+import '../models/gradient_preset.dart';
 import '../models/icon_asset.dart';
 import '../models/key_config.dart';
 import '../models/key_group.dart';
-import '../models/gradient_preset.dart';
 import '../models/key_shape.dart';
 import '../models/theme_project.dart';
 import '../services/project_store_service.dart';
+import '../services/theme_import_service.dart';
 
 /// إدارة حالة الثيم الحالي
 class ThemeProvider extends ChangeNotifier {
@@ -36,9 +38,8 @@ class ThemeProvider extends ChangeNotifier {
       final saved = await ProjectStoreService.loadCurrentProject();
       if (saved != null) {
         _project = saved;
-        _activeGroupId = saved.groups.isNotEmpty
-            ? saved.groups.first.id
-            : null;
+        _activeGroupId =
+            saved.groups.isNotEmpty ? saved.groups.first.id : null;
         notifyListeners();
       }
     } catch (_) {}
@@ -76,6 +77,21 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ═══ Import Theme ═══
+
+  Future<void> importTheme(File file) async {
+    try {
+      final imported = await ThemeImportService.importTheme(file);
+      _project = imported;
+      _activeGroupId =
+          imported.groups.isNotEmpty ? imported.groups.first.id : null;
+      _hasUnsavedChanges = true;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // ═══ Metadata ═══
 
   void updateName(String name) {
@@ -89,8 +105,10 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   void updateDescription(String description) {
-    _project =
-        _project.copyWith(description: description, updatedAt: DateTime.now());
+    _project = _project.copyWith(
+      description: description,
+      updatedAt: DateTime.now(),
+    );
     _touch();
   }
 
@@ -98,33 +116,87 @@ class ThemeProvider extends ChangeNotifier {
 
   void updateColor(String field, Color color) {
     switch (field) {
-      case 'primary': _project = _project.copyWith(primary: color); break;
-      case 'onPrimary': _project = _project.copyWith(onPrimary: color); break;
-      case 'primaryContainer': _project = _project.copyWith(primaryContainer: color); break;
-      case 'onPrimaryContainer': _project = _project.copyWith(onPrimaryContainer: color); break;
-      case 'secondary': _project = _project.copyWith(secondary: color); break;
-      case 'onSecondary': _project = _project.copyWith(onSecondary: color); break;
-      case 'secondaryContainer': _project = _project.copyWith(secondaryContainer: color); break;
-      case 'onSecondaryContainer': _project = _project.copyWith(onSecondaryContainer: color); break;
-      case 'tertiary': _project = _project.copyWith(tertiary: color); break;
-      case 'onTertiary': _project = _project.copyWith(onTertiary: color); break;
-      case 'background': _project = _project.copyWith(background: color); break;
-      case 'onBackground': _project = _project.copyWith(onBackground: color); break;
-      case 'surface': _project = _project.copyWith(surface: color); break;
-      case 'onSurface': _project = _project.copyWith(onSurface: color); break;
-      case 'surfaceVariant': _project = _project.copyWith(surfaceVariant: color); break;
-      case 'onSurfaceVariant': _project = _project.copyWith(onSurfaceVariant: color); break;
-      case 'error': _project = _project.copyWith(error: color); break;
-      case 'onError': _project = _project.copyWith(onError: color); break;
-      case 'outline': _project = _project.copyWith(outline: color); break;
-      case 'outlineVariant': _project = _project.copyWith(outlineVariant: color); break;
-      case 'keyboardSurface': _project = _project.copyWith(keyboardSurface: color); break;
-      case 'keyboardContainer': _project = _project.copyWith(keyboardContainer: color); break;
-      case 'keyboardContainerVariant': _project = _project.copyWith(keyboardContainerVariant: color); break;
-      case 'onKeyboardContainer': _project = _project.copyWith(onKeyboardContainer: color); break;
-      case 'keyboardPress': _project = _project.copyWith(keyboardPress: color); break;
-      case 'keyboardContainerPressed': _project = _project.copyWith(keyboardContainerPressed: color); break;
-      case 'onKeyboardContainerPressed': _project = _project.copyWith(onKeyboardContainerPressed: color); break;
+      case 'primary':
+        _project = _project.copyWith(primary: color);
+        break;
+      case 'onPrimary':
+        _project = _project.copyWith(onPrimary: color);
+        break;
+      case 'primaryContainer':
+        _project = _project.copyWith(primaryContainer: color);
+        break;
+      case 'onPrimaryContainer':
+        _project = _project.copyWith(onPrimaryContainer: color);
+        break;
+      case 'secondary':
+        _project = _project.copyWith(secondary: color);
+        break;
+      case 'onSecondary':
+        _project = _project.copyWith(onSecondary: color);
+        break;
+      case 'secondaryContainer':
+        _project = _project.copyWith(secondaryContainer: color);
+        break;
+      case 'onSecondaryContainer':
+        _project = _project.copyWith(onSecondaryContainer: color);
+        break;
+      case 'tertiary':
+        _project = _project.copyWith(tertiary: color);
+        break;
+      case 'onTertiary':
+        _project = _project.copyWith(onTertiary: color);
+        break;
+      case 'background':
+        _project = _project.copyWith(background: color);
+        break;
+      case 'onBackground':
+        _project = _project.copyWith(onBackground: color);
+        break;
+      case 'surface':
+        _project = _project.copyWith(surface: color);
+        break;
+      case 'onSurface':
+        _project = _project.copyWith(onSurface: color);
+        break;
+      case 'surfaceVariant':
+        _project = _project.copyWith(surfaceVariant: color);
+        break;
+      case 'onSurfaceVariant':
+        _project = _project.copyWith(onSurfaceVariant: color);
+        break;
+      case 'error':
+        _project = _project.copyWith(error: color);
+        break;
+      case 'onError':
+        _project = _project.copyWith(onError: color);
+        break;
+      case 'outline':
+        _project = _project.copyWith(outline: color);
+        break;
+      case 'outlineVariant':
+        _project = _project.copyWith(outlineVariant: color);
+        break;
+      case 'keyboardSurface':
+        _project = _project.copyWith(keyboardSurface: color);
+        break;
+      case 'keyboardContainer':
+        _project = _project.copyWith(keyboardContainer: color);
+        break;
+      case 'keyboardContainerVariant':
+        _project = _project.copyWith(keyboardContainerVariant: color);
+        break;
+      case 'onKeyboardContainer':
+        _project = _project.copyWith(onKeyboardContainer: color);
+        break;
+      case 'keyboardPress':
+        _project = _project.copyWith(keyboardPress: color);
+        break;
+      case 'keyboardContainerPressed':
+        _project = _project.copyWith(keyboardContainerPressed: color);
+        break;
+      case 'onKeyboardContainerPressed':
+        _project = _project.copyWith(onKeyboardContainerPressed: color);
+        break;
     }
     _project = _project.copyWith(updatedAt: DateTime.now());
     _touch();
@@ -160,7 +232,11 @@ class ThemeProvider extends ChangeNotifier {
   // ═══ Background ═══
 
   void updateBackground(BackgroundAsset? bg) {
-    _project = _project.copyWith(background: bg, updatedAt: DateTime.now());
+    _project = _project.copyWith(
+      backgroundAsset: bg,
+      clearBackgroundAsset: bg == null,
+      updatedAt: DateTime.now(),
+    );
     _touch();
   }
 
