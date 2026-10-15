@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/app_colors.dart';
 import '../core/animations.dart';
 import '../models/apply_target.dart';
+import '../models/background_asset.dart';
 import '../models/gradient_preset.dart';
 import '../models/theme_project.dart';
 import '../models/key_shape.dart';
@@ -21,6 +22,7 @@ class PreviewBottomSheet extends StatefulWidget {
   final Color? previewColor;
   final GradientPreset? previewGradient;
   final KeyShape? previewShape;
+  final BackgroundAsset? previewBackground;
   final bool allowBackground;
   final bool allowKeys;
   final ValueChanged<ApplySelection>? onApply;
@@ -32,6 +34,7 @@ class PreviewBottomSheet extends StatefulWidget {
     this.previewColor,
     this.previewGradient,
     this.previewShape,
+    this.previewBackground,
     this.allowBackground = true,
     this.allowKeys = true,
     this.onApply,
@@ -45,6 +48,7 @@ class PreviewBottomSheet extends StatefulWidget {
     Color? previewColor,
     GradientPreset? previewGradient,
     KeyShape? previewShape,
+    BackgroundAsset? previewBackground,
     bool allowBackground = true,
     bool allowKeys = true,
   }) {
@@ -60,6 +64,7 @@ class PreviewBottomSheet extends StatefulWidget {
         previewColor: previewColor,
         previewGradient: previewGradient,
         previewShape: previewShape,
+        previewBackground: previewBackground,
         allowBackground: allowBackground,
         allowKeys: allowKeys,
       ),
@@ -72,6 +77,8 @@ class PreviewBottomSheet extends StatefulWidget {
 
 class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
   ApplyTarget? _selectedTarget;
+  String? _customGroupSelector;
+  String? _customKeySelector;
   bool _targetsExpanded = false;
 
   @override
@@ -279,9 +286,19 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
 
     if (_selectedTarget == null) return result;
 
-    final selection = ApplySelection(target: _selectedTarget!);
+    final selection = ApplySelection(
+      target: _selectedTarget!,
+      customGroupId: _customGroupSelector,
+      customKeySelector: _customKeySelector,
+    );
 
-    if (widget.previewGradient != null) {
+    if (widget.previewBackground != null) {
+      result = ApplyService.applyBackground(
+        project: result,
+        background: widget.previewBackground!,
+        selection: selection,
+      );
+    } else if (widget.previewGradient != null) {
       result = ApplyService.applyGradient(
         project: result,
         gradient: widget.previewGradient!,
@@ -511,7 +528,11 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
     );
 
     if (selection != null) {
-      setState(() => _selectedTarget = selection.target);
+      setState(() {
+        _selectedTarget = selection.target;
+        _customGroupSelector = selection.customGroupId;
+        _customKeySelector = selection.customKeySelector;
+      });
     }
   }
 
@@ -550,7 +571,11 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
                     ? () {
                         Navigator.pop(
                           context,
-                          ApplySelection(target: _selectedTarget!),
+                          ApplySelection(
+                            target: _selectedTarget!,
+                            customGroupId: _customGroupSelector,
+                            customKeySelector: _customKeySelector,
+                          ),
                         );
                       }
                     : null,

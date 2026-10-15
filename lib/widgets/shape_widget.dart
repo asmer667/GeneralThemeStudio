@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../models/key_shape.dart';
@@ -17,6 +19,7 @@ class ShapeWidget extends StatelessWidget {
   final double width;
   final double height;
   final Widget? child;
+  final String? backgroundImagePath;
 
   const ShapeWidget({
     super.key,
@@ -30,10 +33,32 @@ class ShapeWidget extends StatelessWidget {
     required this.width,
     required this.height,
     this.child,
+    this.backgroundImagePath,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (backgroundImagePath != null && !shape.is3D) {
+      final image = backgroundImagePath!.startsWith('assets/')
+          ? Image.asset(backgroundImagePath!, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: color))
+          : Image.file(File(backgroundImagePath!), fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: color));
+      return ClipPath(
+        clipper: _ShapePathClipper(shape, roundedness),
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              image,
+              if (borderWidth > 0) CustomPaint(painter: _ShapeBorderPainter(shape, borderColor, borderWidth, roundedness)),
+              if (child != null) Center(child: child),
+            ],
+          ),
+        ),
+      );
+    }
+
     // إذا كان 3D → استخدم Shape3DWidget
     if (shape.is3D) {
       return Shape3DWidget(
@@ -62,6 +87,40 @@ class ShapeWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ShapePathClipper extends CustomClipper<Path> {
+  final KeyShape shape;
+  final double roundedness;
+  const _ShapePathClipper(this.shape, this.roundedness);
+
+  @override
+  Path getClip(Size size) => ShapeRenderer.render(shape, size, roundedness: roundedness);
+
+  @override
+  bool shouldReclip(covariant _ShapePathClipper oldClipper) =>
+      oldClipper.shape != shape || oldClipper.roundedness != roundedness;
+}
+
+class _ShapeBorderPainter extends CustomPainter {
+  final KeyShape shape;
+  final Color color;
+  final double width;
+  final double roundedness;
+  const _ShapeBorderPainter(this.shape, this.color, this.width, this.roundedness);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawPath(
+      ShapeRenderer.render(shape, size, roundedness: roundedness),
+      Paint()..color = color..style = PaintingStyle.stroke..strokeWidth = width..isAntiAlias = true,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _ShapeBorderPainter oldDelegate) =>
+      oldDelegate.shape != shape || oldDelegate.color != color ||
+      oldDelegate.width != width || oldDelegate.roundedness != roundedness;
 }
 
 class _ShapePainter2D extends CustomPainter {

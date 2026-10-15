@@ -3,13 +3,12 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
 /// مصدر خلفيات مجاني
 enum WallpaperSource {
   picsum,
-  unsplash,
-  placeholder,
 }
 
 extension WallpaperSourceExt on WallpaperSource {
@@ -17,21 +16,13 @@ extension WallpaperSourceExt on WallpaperSource {
     switch (this) {
       case WallpaperSource.picsum:
         return 'Picsum Photos';
-      case WallpaperSource.unsplash:
-        return 'Unsplash';
-      case WallpaperSource.placeholder:
-        return 'Placeholder';
     }
   }
 
   String get description {
     switch (this) {
       case WallpaperSource.picsum:
-        return 'صور مجانية عالية الجودة';
-      case WallpaperSource.unsplash:
-        return 'خلفيات احترافية من Unsplash';
-      case WallpaperSource.placeholder:
-        return 'خلفيات تجريبية متنوعة';
+        return 'صور فعلية مجانية يمكن تنزيلها واستخدامها';
     }
   }
 }
@@ -82,14 +73,7 @@ class WallpaperApi {
     int count = 30,
     int page = 1,
   }) async {
-    switch (source) {
-      case WallpaperSource.picsum:
-        return _fetchPicsum(count: count, page: page);
-      case WallpaperSource.unsplash:
-        return _fetchUnsplash(count: count);
-      case WallpaperSource.placeholder:
-        return _fetchPlaceholder(count: count);
-    }
+    return _fetchPicsum(count: count, page: page);
   }
 
   static Future<List<OnlineWallpaper>> _fetchPicsum({
@@ -129,66 +113,6 @@ class WallpaperApi {
     return [];
   }
 
-  static Future<List<OnlineWallpaper>> _fetchUnsplash({
-    int count = 30,
-  }) async {
-    final result = <OnlineWallpaper>[];
-    final categories = [
-      'nature',
-      'abstract',
-      'gradient',
-      'space',
-      'texture',
-      'city',
-      'minimal',
-      'neon',
-      'dark',
-      'pattern',
-    ];
-
-    for (int i = 0; i < count; i++) {
-      final cat = categories[i % categories.length];
-      final seed = DateTime.now().millisecondsSinceEpoch + i;
-      result.add(OnlineWallpaper(
-        id: 'unsplash_$seed',
-        url: 'https://source.unsplash.com/1080x1920/?$cat&sig=$seed',
-        thumbnailUrl: 'https://source.unsplash.com/300x300/?$cat&sig=$seed',
-        author: 'Unsplash',
-        source: 'Unsplash',
-      ));
-    }
-    return result;
-  }
-
-  static Future<List<OnlineWallpaper>> _fetchPlaceholder({
-    int count = 30,
-  }) async {
-    final result = <OnlineWallpaper>[];
-    final colors = [
-      ['16D9F2', '8B5CF6'],
-      ['FF6B9D', 'E91E63'],
-      ['10E5A0', '00BCD4'],
-      ['FF9500', 'FFD700'],
-      ['3B82F6', '1E40AF'],
-      ['8B5CF6', 'FF6B9D'],
-    ];
-
-    for (int i = 0; i < count; i++) {
-      final pair = colors[i % colors.length];
-      final seed = DateTime.now().millisecondsSinceEpoch + i;
-      result.add(OnlineWallpaper(
-        id: 'ph_$seed',
-        url:
-            'https://via.placeholder.com/1080x1920/${pair[0]}/${pair[1]}?text=Wallpaper+$i',
-        thumbnailUrl:
-            'https://via.placeholder.com/300x300/${pair[0]}/${pair[1]}',
-        author: 'Placeholder',
-        source: 'Placeholder',
-      ));
-    }
-    return result;
-  }
-
   // ═══════════════════════════════════════════
   // Download
   // ═══════════════════════════════════════════
@@ -213,8 +137,9 @@ class WallpaperApi {
       );
 
       if (await file.exists()) {
-        final size = await file.length();
-        if (size > 1024) return file;
+        final bytes = await file.readAsBytes();
+        if (bytes.length > 1024 && img.decodeImage(bytes) != null) return file;
+        await file.delete();
       }
       return null;
     } catch (e) {
@@ -231,16 +156,22 @@ class WallpaperApi {
         await dir.create(recursive: true);
       }
 
-      final ext = url.split('.').last.split('?').first;
-      final fileName =
-          'wall_${DateTime.now().millisecondsSinceEpoch}.${ext.isEmpty ? "jpg" : ext}';
+      final uri = Uri.parse(url);
+      final pathExt = uri.pathSegments.isEmpty
+          ? ''
+          : uri.pathSegments.last.split('.').last.toLowerCase();
+      final ext = const {'jpg', 'jpeg', 'png', 'webp'}.contains(pathExt)
+          ? (pathExt == 'jpeg' ? 'jpg' : pathExt)
+          : 'jpg';
+      final fileName = 'wall_${DateTime.now().millisecondsSinceEpoch}.$ext';
       final file = File('${dir.path}/$fileName');
 
       await _dio.download(url, file.path);
 
       if (await file.exists()) {
-        final size = await file.length();
-        if (size > 1024) return file;
+        final bytes = await file.readAsBytes();
+        if (bytes.length > 1024 && img.decodeImage(bytes) != null) return file;
+        await file.delete();
       }
       return null;
     } catch (_) {

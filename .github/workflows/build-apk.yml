@@ -49,6 +49,13 @@ jobs:
           cp /tmp/pubspec.yaml.original pubspec.yaml
           echo "✅ Files restored"
 
+      - name: Enable network access for online catalogs
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if [ -f "$MANIFEST" ] && ! grep -q 'android.permission.INTERNET' "$MANIFEST"; then
+            sed -i '/<manifest/a\    <uses-permission android:name="android.permission.INTERNET" />' "$MANIFEST"
+          fi
+
       - name: Fix compileSdk to 35
         run: |
           if [ -f "android/app/build.gradle" ]; then

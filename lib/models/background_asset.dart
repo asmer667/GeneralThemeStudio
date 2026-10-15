@@ -215,6 +215,59 @@ class BackgroundAsset {
 class BuiltinBackgrounds {
   BuiltinBackgrounds._();
 
+  static const List<String> wallpaperNames = [
+    'Aurora Waves',
+    'Neon Circuit',
+    'Midnight Galaxy',
+    'Purple Nebula',
+    'Emerald Forest',
+    'Deep Ocean',
+    'Golden Sunset',
+    'Cosmic Dust',
+    'Silver Mist',
+    'Desert Dusk',
+    'Rainforest Canopy',
+    'Misty Mountains',
+    'Ocean Current',
+    'Blue Ice',
+    'Pink Nebula',
+    'Cyber Grid',
+    'Neon Geometry',
+    'Lunar Surface',
+    'Starfield',
+    'Volcanic Glow',
+    'Autumn Forest',
+    'Pine Silhouette',
+    'Tropical Dawn',
+    'Moonlit Lake',
+    'Sakura Night',
+    'Glacier Blue',
+    'Sand Dunes',
+    'Northern Lights',
+    'Deep Space',
+    'Digital Rain',
+    'Abstract Fluid',
+    'Glass Prism',
+    'Crystal Cave',
+    'Marble Night',
+    'Soft Pastel',
+    'Violet Smoke',
+    'Electric Storm',
+    'Coral Reef',
+    'Jade Garden',
+    'Midnight Bloom',
+    'Geometric Pulse',
+    'Hex Neon',
+    'Holographic Waves',
+    'Dark Carbon',
+    'Liquid Chrome',
+    'Fire Sky',
+    'Ocean Horizon',
+    'Enchanted Woods',
+    'Starlit Peaks',
+    'Aurora Forest',
+  ];
+
   static List<BackgroundAsset> get all => [
         BackgroundAsset.gradient(
           name: 'Aurora',
@@ -302,6 +355,13 @@ class BuiltinBackgrounds {
         BackgroundAsset.solid(
           name: 'رمادي غامق',
           color: const Color(0xFF1A1A1A),
+        ),
+        ...List.generate(
+          wallpaperNames.length,
+          (index) => BackgroundAsset.builtin(
+            name: wallpaperNames[index],
+            assetPath: 'assets/backgrounds/bg_${(index + 1).toString().padLeft(2, '0')}.jpg',
+          ),
         ),
       ];
 }

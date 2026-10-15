@@ -220,6 +220,7 @@ class ThemeProject {
     List<KeyGroup>? groups,
     String? fontName,
     String? fontPath,
+    bool clearFont = false,
     String? backgroundImagePath,
     BackgroundAsset? backgroundAsset,
     bool clearBackgroundAsset = false,
@@ -272,8 +273,8 @@ class ThemeProject {
       autoBorders: autoBorders ?? this.autoBorders,
       centerHints: centerHints ?? this.centerHints,
       groups: groups ?? this.groups,
-      fontName: fontName ?? this.fontName,
-      fontPath: fontPath ?? this.fontPath,
+      fontName: clearFont ? null : (fontName ?? this.fontName),
+      fontPath: clearFont ? null : (fontPath ?? this.fontPath),
       backgroundImagePath:
           backgroundImagePath ?? this.backgroundImagePath,
       backgroundAsset: clearBackgroundAsset

@@ -23,6 +23,13 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
   WallpaperSource _source = WallpaperSource.picsum;
   bool _isDownloading = false;
   double _progress = 0;
+  final TextEditingController _directUrlController = TextEditingController();
+
+  @override
+  void dispose() {
+    _directUrlController.dispose();
+    super.dispose();
+  }
 
   Future<void> _downloadWallpaper(OnlineWallpaper wallpaper) async {
     setState(() {
@@ -56,12 +63,8 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
 
       if (widget.onWallpaperSelected != null) {
         widget.onWallpaperSelected!(bg);
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم تنزيل: ${bg.name}')),
-        );
       }
+      Navigator.pop(context, bg);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -77,6 +80,43 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
     }
   }
 
+  Future<void> _downloadDirectUrl() async {
+    final url = _directUrlController.text.trim();
+    final uri = Uri.tryParse(url);
+    if (uri == null || !uri.hasAuthority ||
+        (uri.scheme != 'https' && uri.scheme != 'http')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('أدخل رابط صورة مباشر يبدأ بـ https:// أو http://')),
+      );
+      return;
+    }
+    setState(() { _isDownloading = true; _progress = 0; });
+    try {
+      final file = await WallpaperApi.downloadFromUrl(url);
+      if (!mounted) return;
+      if (file == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تعذر تنزيل الصورة. استخدم رابط ملف صورة مباشر وليس رابط صفحة ويب.')),
+        );
+        return;
+      }
+      final bg = await BackgroundService.uploadBackground(file);
+      if (!mounted) return;
+      if (widget.onWallpaperSelected != null) {
+        widget.onWallpaperSelected!(bg);
+      }
+      Navigator.pop(context, bg);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('فشل تنزيل الرابط: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() { _isDownloading = false; _progress = 0; });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,6 +129,7 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
           Column(
             children: [
               _buildSourceSelector(),
+              _buildDirectUrlPanel(),
               Expanded(
                 child: OnlineWallpapersGrid(
                   source: _source,
@@ -99,6 +140,44 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
           ),
           if (_isDownloading) _buildDownloadOverlay(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDirectUrlPanel() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
+      child: GlassCard(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('أو نزّل صورة من رابط مباشر', style: TextStyle(color: AppColors.textDarkPrimary, fontWeight: FontWeight.w700, fontSize: 12)),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _directUrlController,
+                    keyboardType: TextInputType.url,
+                    textDirection: TextDirection.ltr,
+                    decoration: const InputDecoration(
+                      hintText: 'https://example.com/wallpaper.jpg',
+                      prefixIcon: Icon(Icons.link),
+                      isDense: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: _isDownloading ? null : _downloadDirectUrl,
+                  icon: const Icon(Icons.download_for_offline, color: AppColors.neonCyan),
+                  tooltip: 'تنزيل الرابط',
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

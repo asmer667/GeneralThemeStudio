@@ -199,9 +199,7 @@ class _ExportScreenState extends State<ExportScreen> {
               '${assets.icons.length} أيقونة',
               'Icons',
             ),
-          if (bg != null &&
-              (bg.type == BackgroundType.image ||
-                  bg.type == BackgroundType.builtin))
+          if (bg != null)
             _fileRow(
               Icons.wallpaper,
               'background.png',

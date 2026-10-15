@@ -164,7 +164,7 @@ class GradientsTab extends StatelessWidget {
       selection: selection,
     );
 
-    provider.loadProject(updated);
+    provider.replaceProject(updated);
 
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

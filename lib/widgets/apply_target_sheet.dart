@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/app_colors.dart';
 import '../core/animations.dart';
 import '../models/apply_target.dart';
+import '../providers/theme_provider.dart';
 import '../providers/theme_provider.dart';
 import 'glass_card.dart';
 import 'neon_button.dart';
@@ -49,6 +51,15 @@ class ApplyTargetSheet extends StatefulWidget {
 class _ApplyTargetSheetState extends State<ApplyTargetSheet> {
   ApplyTarget? _selected;
   ApplyTargetCategory? _activeCategory;
+  String? _customGroupSelector;
+  final TextEditingController _customKeyController =
+      TextEditingController(text: 'icon delete_key');
+
+  @override
+  void dispose() {
+    _customKeyController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,28 +325,67 @@ class _ApplyTargetSheetState extends State<ApplyTargetSheet> {
   }
 
   Widget _buildApplyButton() {
+    final groups = context.read<ThemeProvider>().project.groups;
+    if (_selected == ApplyTarget.customGroup &&
+        _customGroupSelector == null && groups.isNotEmpty) {
+      _customGroupSelector = groups.first.selector;
+    }
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.darkBg,
         border: Border(
-          top: BorderSide(
-            color: Colors.white.withOpacity(0.05),
-          ),
+          top: BorderSide(color: Colors.white.withOpacity(0.05)),
         ),
       ),
       child: SafeArea(
         top: false,
-        child: NeonButton(
-          label: 'تطبيق على ${_selected!.labelAr}',
-          icon: Icons.check,
-          onPressed: () {
-            Navigator.pop(
-              context,
-              ApplySelection(target: _selected!),
-            );
-          },
-          fullWidth: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_selected == ApplyTarget.customKey) ...[
+              TextField(
+                controller: _customKeyController,
+                decoration: const InputDecoration(
+                  labelText: 'محدد الزر (FUTO selector)',
+                  hintText: 'مثال: icon delete_key أو spacebar',
+                  helperText: 'اكتب المحدد الذي تريد تطبيق الشكل عليه.',
+                ),
+                textDirection: TextDirection.ltr,
+              ),
+              const SizedBox(height: 12),
+            ],
+            if (_selected == ApplyTarget.customGroup && groups.isNotEmpty) ...[
+              DropdownButtonFormField<String>(
+                value: _customGroupSelector,
+                decoration: const InputDecoration(labelText: 'المجموعة المخصصة'),
+                items: groups.map((g) => DropdownMenuItem<String>(
+                  value: g.selector, child: Text('${g.name} — ${g.selector}'),
+                )).toList(),
+                onChanged: (value) => setState(() => _customGroupSelector = value),
+              ),
+              const SizedBox(height: 12),
+            ],
+            NeonButton(
+              label: 'تطبيق على ${_selected!.labelAr}',
+              icon: Icons.check,
+              onPressed: () {
+                final customKey = _customKeyController.text.trim();
+                if (_selected == ApplyTarget.customKey && customKey.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('اكتب محدد الزر أولاً')),
+                  );
+                  return;
+                }
+                Navigator.pop(context, ApplySelection(
+                  target: _selected!,
+                  customGroupId: _customGroupSelector,
+                  customKeySelector: customKey,
+                ));
+              },
+              fullWidth: true,
+            ),
+          ],
         ),
       ),
     );

@@ -55,7 +55,7 @@ class _ShapesLibraryScreenState extends State<ShapesLibraryScreen> {
       selection: selection,
     );
 
-    provider.loadProject(updated);
+    provider.replaceProject(updated);
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

@@ -77,6 +77,16 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Replace the current project after an edit and keep autosave/dirty state.
+  void replaceProject(ThemeProject project) {
+    _project = project.copyWith(updatedAt: DateTime.now());
+    if (_activeGroupId != null &&
+        !_project.groups.any((group) => group.id == _activeGroupId)) {
+      _activeGroupId = _project.groups.isNotEmpty ? _project.groups.first.id : null;
+    }
+    _touch();
+  }
+
   // ═══ Import Theme ═══
 
   Future<void> importTheme(File file) async {
@@ -253,8 +263,7 @@ class ThemeProvider extends ChangeNotifier {
 
   void clearFont() {
     _project = _project.copyWith(
-      fontName: null,
-      fontPath: null,
+      clearFont: true,
       updatedAt: DateTime.now(),
     );
     _touch();

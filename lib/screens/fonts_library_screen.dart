@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/app_colors.dart';
+import '../providers/theme_provider.dart';
 import '../services/font_download_service.dart';
 import '../services/font_service.dart';
 import '../services/google_fonts_api.dart';
@@ -93,11 +95,26 @@ class _LocalFontsTabState extends State<_LocalFontsTab> {
     });
   }
 
+  Future<void> _selectFont(String family, String filePath) async {
+    final loaded = await FontService.loadFontForPreview(family, filePath);
+    if (!mounted) return;
+    if (!loaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تعذر تحميل الخط للمعاينة. تحقق من أن الملف TTF/OTF صالح.')),
+      );
+      return;
+    }
+    context.read<ThemeProvider>().updateFont(family, filePath);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('تم اختيار خط $family للعربية والإنجليزية')),
+    );
+  }
+
   Future<void> _pickFont() async {
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['ttf', 'otf', 'woff', 'woff2'],
+        allowedExtensions: ['ttf', 'otf'],
       );
       if (result == null || result.files.isEmpty) return;
       final path = result.files.first.path;
@@ -120,6 +137,7 @@ class _LocalFontsTabState extends State<_LocalFontsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedFont = context.watch<ThemeProvider>().project.fontName;
     if (_loading) {
       return const Center(
         child: CircularProgressIndicator(color: AppColors.neonCyan),
@@ -155,8 +173,9 @@ class _LocalFontsTabState extends State<_LocalFontsTab> {
           (f) => LocalFontCard(
             family: f.family,
             displayName: f.displayName,
-            subtitle: f.displayNameAr,
-            onTap: () {},
+            subtitle: '${f.displayNameAr} • عربي + English',
+            isSelected: selectedFont == f.family,
+            onTap: () => _selectFont(f.family, f.assetPath),
           ),
         ),
         if ((_fonts.downloaded as List).isNotEmpty) ...[
@@ -175,7 +194,8 @@ class _LocalFontsTabState extends State<_LocalFontsTab> {
               family: f.family,
               displayName: f.family,
               subtitle: f.sizeFormatted,
-              onTap: () {},
+              isSelected: selectedFont == f.family,
+              onTap: () => _selectFont(f.family, f.filePath),
               onDelete: () async {
                 await FontDownloadService.delete(f.family);
                 await _load();
@@ -200,7 +220,8 @@ class _LocalFontsTabState extends State<_LocalFontsTab> {
               displayName: f.family,
               subtitle: f.sizeFormatted,
               isCustom: true,
-              onTap: () {},
+              isSelected: selectedFont == f.family,
+              onTap: () => _selectFont(f.family, f.filePath),
               onDelete: () async {
                 await FontService.deleteCustomFont(f.family);
                 await _load();
@@ -310,6 +331,29 @@ class _GoogleFontsTabState extends State<_GoogleFontsTab> {
     }
   }
 
+  Future<void> _selectDownloadedFont(GoogleFont font) async {
+    final file = await FontDownloadService.getFontFile(font.family);
+    if (!await file.exists()) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('ملف الخط غير موجود. أعد تنزيله.')),
+      );
+      return;
+    }
+    final loaded = await FontService.loadFontForPreview(font.family, file.path);
+    if (!mounted) return;
+    if (!loaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تعذر قراءة هذا الخط. قد يكون التنزيل بصيغة غير مدعومة.')),
+      );
+      return;
+    }
+    context.read<ThemeProvider>().updateFont(font.family, file.path);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('تم تطبيق خط ${font.family} على معاينة العربية والإنجليزية')),
+    );
+  }
+
   Future<void> _delete(String family) async {
     await FontDownloadService.delete(family);
     if (!mounted) return;
@@ -318,6 +362,7 @@ class _GoogleFontsTabState extends State<_GoogleFontsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedFont = context.watch<ThemeProvider>().project.fontName;
     if (_loading) {
       return const Center(
         child: Column(
@@ -387,6 +432,10 @@ class _GoogleFontsTabState extends State<_GoogleFontsTab> {
                 isDownloading: _progress.containsKey(f.family),
                 downloadProgress: _progress[f.family],
                 onDownload: () => _download(f),
+                onSelect: _downloaded.contains(f.family)
+                    ? () => _selectDownloadedFont(f)
+                    : null,
+                isSelected: selectedFont == f.family,
                 onDelete: () => _delete(f.family),
               );
             },

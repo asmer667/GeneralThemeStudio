@@ -107,6 +107,7 @@ class BorderAsset {
     double? paddingBottom,
     double? paddingLeft,
     String? customImagePath,
+    bool clearCustomImage = false,
   }) {
     return BorderAsset(
       id: id ?? this.id,
@@ -132,7 +133,7 @@ class BorderAsset {
       paddingRight: paddingRight ?? this.paddingRight,
       paddingBottom: paddingBottom ?? this.paddingBottom,
       paddingLeft: paddingLeft ?? this.paddingLeft,
-      customImagePath: customImagePath ?? this.customImagePath,
+      customImagePath: clearCustomImage ? null : (customImagePath ?? this.customImagePath),
     );
   }
 
@@ -249,7 +250,7 @@ class BorderAsset {
     final g = (c.green).toRadixString(16).padLeft(2, '0');
     final b = (c.blue).toRadixString(16).padLeft(2, '0');
     final a = (c.alpha).toRadixString(16).padLeft(2, '0');
-    return '#$r$g$b$a'.toUpperCase();
+    return (c.alpha == 255 ? '#$r$g$b' : '#$r$g$b$a').toUpperCase();
   }
 
   @override
