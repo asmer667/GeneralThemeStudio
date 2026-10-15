@@ -21,10 +21,10 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Flutter
+      - name: Set up Flutter 3.27.1
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5'
+          flutter-version: '3.27.1'
           channel: 'stable'
           cache: true
 
@@ -49,11 +49,14 @@ jobs:
           cp /tmp/pubspec.yaml.original pubspec.yaml
           echo "✅ Files restored"
 
-      - name: Fix compileSdk to 34
+      - name: Fix compileSdk to 35
         run: |
           if [ -f "android/app/build.gradle" ]; then
-            sed -i 's/compileSdkVersion [0-9]\+/compileSdkVersion 34/g' android/app/build.gradle
-            sed -i 's/compileSdk [0-9]\+/compileSdk 34/g' android/app/build.gradle
+            sed -i 's/compileSdkVersion [0-9]\+/compileSdkVersion 35/g' android/app/build.gradle
+            sed -i 's/compileSdk [0-9]\+/compileSdk 35/g' android/app/build.gradle
+          fi
+          if [ -f "android/app/build.gradle.kts" ]; then
+            sed -i 's/compileSdk = [0-9]\+/compileSdk = 35/g' android/app/build.gradle.kts
           fi
           if [ -f "android/gradle.properties" ]; then
             cat > android/gradle.properties << 'EOF'
@@ -62,84 +65,6 @@ jobs:
           android.enableJetifier=true
           EOF
           fi
-
-      - name: Fix Flutter 3.24.5 compatibility
-        run: |
-          echo "🔧 Fixing withValues → withOpacity..."
-          find lib -name "*.dart" -type f -exec sed -i \
-            -e 's/\.withValues(alpha: \([^)]*\))/.withOpacity(\1)/g' \
-            -e 's/\.withValues(alpha:\([^)]*\))/.withOpacity(\1)/g' \
-            {} +
-
-          echo "🔧 Fixing Color .r .g .b → .red .green .blue..."
-          find lib -name "*.dart" -type f -exec sed -i \
-            -e 's/\.r \* 255/.red * 255/g' \
-            -e 's/\.g \* 255/.green * 255/g' \
-            -e 's/\.b \* 255/.blue * 255/g' \
-            -e 's/color\.r)/color.red)/g' \
-            -e 's/color\.g)/color.green)/g' \
-            -e 's/color\.b)/color.blue)/g' \
-            {} +
-
-          echo "🔧 Fixing final a.r / a.g / a.b..."
-          sed -i 's/final dr = (a.r - b.r).abs();/final dr = (a.red - b.red).abs();/g' lib/utils/color_utils.dart
-          sed -i 's/final dg = (a.g - b.g).abs();/final dg = (a.green - b.green).abs();/g' lib/utils/color_utils.dart
-          sed -i 's/final db = (a.b - b.b).abs();/final db = (a.blue - b.blue).abs();/g' lib/utils/color_utils.dart
-
-          echo "✅ Conversion done"
-          echo "Checking for remaining issues..."
-          grep -rn "withValues\|\.r \*\|\.g \*\|\.b \*" lib/ || echo "✅ Clean"
-
-      - name: Fix wallpaper_api.dart cast issue
-        run: |
-          echo "🔧 Fixing Future.cast issue in wallpaper_api.dart..."
-          python3 << 'PYEOF'
-          import re
-
-          file_path = 'lib/services/wallpaper_api.dart'
-          with open(file_path, 'r') as f:
-              content = f.read()
-
-          # ابحث عن النمط الخاطئ
-          old_pattern = '''final files = await dir
-              .list()
-              .where((e) {
-                if (e is! File) return false;
-                final ext = e.path.split('.').last.toLowerCase();
-                return ['png', 'jpg', 'jpeg', 'webp'].contains(ext);
-              })
-              .toList()
-              .cast<File>()
-              .toList();'''
-
-          new_pattern = '''final entities = await dir.list().toList();
-          final files = entities
-              .whereType<File>()
-              .where((e) {
-                final ext = e.path.split('.').last.toLowerCase();
-                return ['png', 'jpg', 'jpeg', 'webp'].contains(ext);
-              })
-              .toList();'''
-
-          content = content.replace(old_pattern, new_pattern)
-
-          # نمط بديل إن اختلف
-          content = re.sub(
-              r'\.toList\(\)\s*\.cast<File>\(\)\s*\.toList\(\)',
-              '.whereType<File>().toList()',
-              content
-          )
-
-          with open(file_path, 'w') as f:
-              f.write(content)
-
-          print("✅ wallpaper_api.dart fixed")
-          PYEOF
-
-      - name: Fix downloads folder
-        run: |
-          echo "🔧 Checking other cast issues..."
-          grep -rn "\.cast<File>" lib/ || echo "✅ No cast issues"
 
       - name: Install dependencies
         run: flutter pub get
