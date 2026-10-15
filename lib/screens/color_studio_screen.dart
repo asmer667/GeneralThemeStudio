@@ -17,34 +17,52 @@ enum ColorFilter { all, dark, light, neon, pastel, metal }
 extension ColorFilterExt on ColorFilter {
   String get label {
     switch (this) {
-      case ColorFilter.all: return 'الكل';
-      case ColorFilter.dark: return 'داكنة';
-      case ColorFilter.light: return 'فاتحة';
-      case ColorFilter.neon: return 'نيون';
-      case ColorFilter.pastel: return 'باستيل';
-      case ColorFilter.metal: return 'معدنية';
+      case ColorFilter.all:
+        return 'الكل';
+      case ColorFilter.dark:
+        return 'داكنة';
+      case ColorFilter.light:
+        return 'فاتحة';
+      case ColorFilter.neon:
+        return 'نيون';
+      case ColorFilter.pastel:
+        return 'باستيل';
+      case ColorFilter.metal:
+        return 'معدنية';
     }
   }
 
   IconData get icon {
     switch (this) {
-      case ColorFilter.all: return Icons.apps;
-      case ColorFilter.dark: return Icons.dark_mode;
-      case ColorFilter.light: return Icons.light_mode;
-      case ColorFilter.neon: return Icons.flash_on;
-      case ColorFilter.pastel: return Icons.colorize;
-      case ColorFilter.metal: return Icons.auto_awesome;
+      case ColorFilter.all:
+        return Icons.apps;
+      case ColorFilter.dark:
+        return Icons.dark_mode;
+      case ColorFilter.light:
+        return Icons.light_mode;
+      case ColorFilter.neon:
+        return Icons.flash_on;
+      case ColorFilter.pastel:
+        return Icons.colorize;
+      case ColorFilter.metal:
+        return Icons.auto_awesome;
     }
   }
 
   Color get color {
     switch (this) {
-      case ColorFilter.all: return const Color(0xFF16D9F2);
-      case ColorFilter.dark: return const Color(0xFF5C6BC0);
-      case ColorFilter.light: return const Color(0xFFFFD700);
-      case ColorFilter.neon: return const Color(0xFF00E5FF);
-      case ColorFilter.pastel: return const Color(0xFFFFB4CE);
-      case ColorFilter.metal: return const Color(0xFFC0C0C0);
+      case ColorFilter.all:
+        return const Color(0xFF16D9F2);
+      case ColorFilter.dark:
+        return const Color(0xFF5C6BC0);
+      case ColorFilter.light:
+        return const Color(0xFFFFD700);
+      case ColorFilter.neon:
+        return const Color(0xFF00E5FF);
+      case ColorFilter.pastel:
+        return const Color(0xFFFFB4CE);
+      case ColorFilter.metal:
+        return const Color(0xFFC0C0C0);
     }
   }
 }
@@ -98,7 +116,11 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('تم تطبيق ${_colorHex(color)} على ${selection.target.labelAr}')),
+      SnackBar(
+        content: Text(
+          'تم تطبيق ${_colorHex(color)} على ${selection.target.labelAr}',
+        ),
+      ),
     );
   }
 
@@ -127,7 +149,11 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('تم تطبيق ${gradient.name} على ${selection.target.labelAr}')),
+      SnackBar(
+        content: Text(
+          'تم تطبيق ${gradient.name} على ${selection.target.labelAr}',
+        ),
+      ),
     );
   }
 
@@ -137,7 +163,6 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
       backgroundColor: AppColors.darkBg,
       body: Column(
         children: [
-          // رأس
           SafeArea(
             bottom: false,
             child: CompactPreviewHeader(
@@ -166,15 +191,13 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
               ],
             ),
           ),
-          // المعاينة الثابتة
           const StickyKeyboardPreview(scale: 0.7),
-          // التبويبات
           Container(
             decoration: BoxDecoration(
               color: AppColors.darkBg,
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: Colors.white.withOpacity(0.05),
                 ),
               ),
             ),
@@ -193,7 +216,6 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
               ],
             ),
           ),
-          // المحتوى
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -241,12 +263,12 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
           color: color,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.15),
+            color: Colors.white.withOpacity(0.15),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: color.withValues(alpha: 0.3),
+              color: color.withOpacity(0.3),
               blurRadius: 8,
             ),
           ],
@@ -258,7 +280,7 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.3),
+                color: Colors.black.withOpacity(0.3),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -323,16 +345,19 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
               onTap: () => onChanged(f),
               child: AnimatedContainer(
                 duration: AppAnimations.fast,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? f.color.withValues(alpha: 0.2)
+                      ? f.color.withOpacity(0.2)
                       : AppColors.darkContainer,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: isSelected
                         ? f.color
-                        : Colors.white.withValues(alpha: 0.08),
+                        : Colors.white.withOpacity(0.08),
                     width: isSelected ? 1.5 : 1,
                   ),
                   boxShadow: isSelected
@@ -351,7 +376,9 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
                     Text(
                       f.label,
                       style: TextStyle(
-                        color: isSelected ? f.color : AppColors.textDarkPrimary,
+                        color: isSelected
+                            ? f.color
+                            : AppColors.textDarkPrimary,
                         fontSize: 12,
                         fontWeight:
                             isSelected ? FontWeight.w800 : FontWeight.w600,
@@ -400,30 +427,54 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
 
   List<Color> _generateSolidColors() {
     return [
-      const Color(0xFF16D9F2), const Color(0xFF8B5CF6),
-      const Color(0xFFFF6B9D), const Color(0xFF10E5A0),
-      const Color(0xFF3B82F6), const Color(0xFFFF9500),
-      const Color(0xFFFFD700), const Color(0xFFFF3D5A),
-      const Color(0xFFE91E63), const Color(0xFFCDDC39),
-      const Color(0xFF00BCD4), const Color(0xFF5C6BC0),
-      const Color(0xFF00E5FF), const Color(0xFFFF6E40),
-      const Color(0xFF651FFF), const Color(0xFF00E676),
-      const Color(0xFF6EE8F5), const Color(0xFFA989F9),
-      const Color(0xFFFFB4CE), const Color(0xFF7EE8B5),
-      const Color(0xFF85BAFF), const Color(0xFFFFC685),
-      const Color(0xFFFFF085), const Color(0xFFFF8888),
-      const Color(0xFF071426), const Color(0xFF102C43),
-      const Color(0xFF183D58), const Color(0xFF0A1A28),
-      const Color(0xFF0F1621), const Color(0xFF141C2B),
-      const Color(0xFF1A2536), const Color(0xFF223046),
-      const Color(0xFF05070D), const Color(0xFF0A0F1A),
-      const Color(0xFFFFFFFF), const Color(0xFFF5F8FC),
-      const Color(0xFFB8D4E2), const Color(0xFF808080),
-      const Color(0xFF404040), const Color(0xFF000000),
-      const Color(0xFF8B5A2B), const Color(0xFF654321),
-      const Color(0xFFD2691E), const Color(0xFFCD853F),
-      const Color(0xFFE5E4E2), const Color(0xFFC0C0C0),
-      const Color(0xFFA9A9A9), const Color(0xFFD4AF37),
+      const Color(0xFF16D9F2),
+      const Color(0xFF8B5CF6),
+      const Color(0xFFFF6B9D),
+      const Color(0xFF10E5A0),
+      const Color(0xFF3B82F6),
+      const Color(0xFFFF9500),
+      const Color(0xFFFFD700),
+      const Color(0xFFFF3D5A),
+      const Color(0xFFE91E63),
+      const Color(0xFFCDDC39),
+      const Color(0xFF00BCD4),
+      const Color(0xFF5C6BC0),
+      const Color(0xFF00E5FF),
+      const Color(0xFFFF6E40),
+      const Color(0xFF651FFF),
+      const Color(0xFF00E676),
+      const Color(0xFF6EE8F5),
+      const Color(0xFFA989F9),
+      const Color(0xFFFFB4CE),
+      const Color(0xFF7EE8B5),
+      const Color(0xFF85BAFF),
+      const Color(0xFFFFC685),
+      const Color(0xFFFFF085),
+      const Color(0xFFFF8888),
+      const Color(0xFF071426),
+      const Color(0xFF102C43),
+      const Color(0xFF183D58),
+      const Color(0xFF0A1A28),
+      const Color(0xFF0F1621),
+      const Color(0xFF141C2B),
+      const Color(0xFF1A2536),
+      const Color(0xFF223046),
+      const Color(0xFF05070D),
+      const Color(0xFF0A0F1A),
+      const Color(0xFFFFFFFF),
+      const Color(0xFFF5F8FC),
+      const Color(0xFFB8D4E2),
+      const Color(0xFF808080),
+      const Color(0xFF404040),
+      const Color(0xFF000000),
+      const Color(0xFF8B5A2B),
+      const Color(0xFF654321),
+      const Color(0xFFD2691E),
+      const Color(0xFFCD853F),
+      const Color(0xFFE5E4E2),
+      const Color(0xFFC0C0C0),
+      const Color(0xFFA9A9A9),
+      const Color(0xFFD4AF37),
       const Color(0xFFB8860B),
     ];
   }
@@ -452,25 +503,34 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
           return avgLum > 0.6;
         }).toList();
       case ColorFilter.neon:
-        return all.where((g) => g.name.toLowerCase().contains('neon') ||
-            g.name.toLowerCase().contains('cyan') ||
-            g.name.toLowerCase().contains('purple') ||
-            g.name.toLowerCase().contains('pink')).toList();
+        return all
+            .where((g) =>
+                g.name.toLowerCase().contains('neon') ||
+                g.name.toLowerCase().contains('cyan') ||
+                g.name.toLowerCase().contains('purple') ||
+                g.name.toLowerCase().contains('pink'))
+            .toList();
       case ColorFilter.pastel:
-        return all.where((g) => g.name.toLowerCase().contains('pastel') ||
-            g.name.toLowerCase().contains('light')).toList();
+        return all
+            .where((g) =>
+                g.name.toLowerCase().contains('pastel') ||
+                g.name.toLowerCase().contains('light'))
+            .toList();
       case ColorFilter.metal:
-        return all.where((g) => g.name.toLowerCase().contains('gold') ||
-            g.name.toLowerCase().contains('silver') ||
-            g.name.toLowerCase().contains('bronze') ||
-            g.name.toLowerCase().contains('platinum')).toList();
+        return all
+            .where((g) =>
+                g.name.toLowerCase().contains('gold') ||
+                g.name.toLowerCase().contains('silver') ||
+                g.name.toLowerCase().contains('bronze') ||
+                g.name.toLowerCase().contains('platinum'))
+            .toList();
     }
   }
 
   String _colorHex(Color c) {
-    final r = (c.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (c.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (c.b * 255).round().toRadixString(16).padLeft(2, '0');
+    final r = c.red.toRadixString(16).padLeft(2, '0');
+    final g = c.green.toRadixString(16).padLeft(2, '0');
+    final b = c.blue.toRadixString(16).padLeft(2, '0');
     return '#${r.toUpperCase()}${g.toUpperCase()}${b.toUpperCase()}';
   }
 }
