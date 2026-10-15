@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_colors.dart';
-import '../models/apply_target.dart';
 import '../models/gradient_preset.dart';
 import '../providers/theme_provider.dart';
 import '../services/apply_service.dart';
@@ -31,7 +30,9 @@ class GradientsTab extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => OnlinePalettesScreen(
-                      onGradientSelected: (grad) => _applyGradient(context, grad),
+                      onGradientSelected: (grad) {
+                        if (grad != null) _applyGradient(context, grad);
+                      },
                     ),
                   ),
                 );
@@ -46,8 +47,10 @@ class GradientsTab extends StatelessWidget {
                         colors: [Color(0xFF10E5A0), Color(0xFF16D9F2)],
                       ),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow:
-                          AppColors.glow(AppColors.neonGreen, intensity: 0.5),
+                      boxShadow: AppColors.glow(
+                        AppColors.neonGreen,
+                        intensity: 0.5,
+                      ),
                     ),
                     child: const Icon(
                       Icons.cloud_download_outlined,
@@ -79,8 +82,11 @@ class GradientsTab extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(Icons.arrow_forward_ios,
-                      size: 14, color: AppColors.textDarkHint),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.textDarkHint,
+                  ),
                 ],
               ),
             ),
@@ -96,8 +102,11 @@ class GradientsTab extends StatelessWidget {
                 children: [
                   const Row(
                     children: [
-                      Icon(Icons.gradient,
-                          color: AppColors.neonPurple, size: 20),
+                      Icon(
+                        Icons.gradient,
+                        color: AppColors.neonPurple,
+                        size: 20,
+                      ),
                       SizedBox(width: 8),
                       Text(
                         'مكتبة التدرجات (60+)',
@@ -114,7 +123,9 @@ class GradientsTab extends StatelessWidget {
                     height: 500,
                     child: GradientPicker(
                       selected: null,
-                      onSelected: (grad) => _applyGradient(context, grad),
+                      onSelected: (grad) {
+                        if (grad != null) _applyGradient(context, grad);
+                      },
                     ),
                   ),
                 ],
@@ -134,7 +145,6 @@ class GradientsTab extends StatelessWidget {
   ) async {
     final provider = context.read<ThemeProvider>();
 
-    // Bottom Sheet تفاعلي
     final selection = await PreviewBottomSheet.show(
       context,
       itemName: gradient.name,
@@ -158,8 +168,9 @@ class GradientsTab extends StatelessWidget {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content:
-            Text('تم تطبيق ${gradient.name} على ${selection.target.labelAr}'),
+        content: Text(
+          'تم تطبيق ${gradient.name} على ${selection.target.labelAr}',
+        ),
       ),
     );
   }
