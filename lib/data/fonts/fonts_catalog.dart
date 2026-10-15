@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// كتالوج الخطوط المدمجة
 class FontsCatalog {
   FontsCatalog._();
