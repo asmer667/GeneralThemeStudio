@@ -41,7 +41,7 @@ class Validators {
     return FieldValidation.valid;
   }
 
-  static FieldValidation description(String? value) {
+  static FieldValidation descriptionCheck(String? value) {
     if (value == null) return FieldValidation.valid;
     if (value.length > 200) {
       return FieldValidation.invalid('الوصف طويل جداً');
@@ -166,7 +166,7 @@ class Validators {
     final a = authorName(author);
     if (!a.isValid) errors['author'] = a.error;
 
-    final d = description(description);
+    final d = descriptionCheck(description);
     if (!d.isValid) errors['description'] = d.error;
 
     return errors.isEmpty ? {} : errors;
