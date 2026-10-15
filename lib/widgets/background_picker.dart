@@ -135,7 +135,7 @@ class _BackgroundPickerState extends State<BackgroundPicker>
             color: AppColors.darkBg,
             border: Border(
               bottom: BorderSide(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: Colors.white.withOpacity(0.05),
               ),
             ),
           ),
@@ -242,7 +242,7 @@ class _BackgroundPickerState extends State<BackgroundPicker>
           border: Border.all(
             color: isSelected
                 ? AppColors.neonCyan
-                : Colors.white.withValues(alpha: 0.08),
+                : Colors.white.withOpacity(0.08),
             width: isSelected ? 2.5 : 1,
           ),
           boxShadow: isSelected
@@ -260,7 +260,7 @@ class _BackgroundPickerState extends State<BackgroundPicker>
                   right: 4,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.6),
+                      color: Colors.black.withOpacity(0.6),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -302,7 +302,7 @@ class _BackgroundPickerState extends State<BackgroundPicker>
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        Colors.black.withValues(alpha: 0.7),
+                        Colors.black.withOpacity(0.7),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,

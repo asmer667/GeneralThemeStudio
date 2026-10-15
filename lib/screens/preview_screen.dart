@@ -92,10 +92,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.neonCyan.withValues(alpha: 0.15),
+                color: AppColors.neonCyan.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: AppColors.neonCyan.withValues(alpha: 0.3),
+                  color: AppColors.neonCyan.withOpacity(0.3),
                 ),
               ),
               child: Text(

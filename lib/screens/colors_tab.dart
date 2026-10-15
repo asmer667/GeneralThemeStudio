@@ -101,9 +101,9 @@ class ColorsTab extends StatelessWidget {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.15),
+                    color: color.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: color.withValues(alpha: 0.4)),
+                    border: Border.all(color: color.withOpacity(0.4)),
                   ),
                   child: Icon(icon, color: color, size: 16),
                 ),
@@ -149,12 +149,12 @@ class ColorsTab extends StatelessWidget {
                   color: color,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.25),
+                    color: Colors.white.withOpacity(0.25),
                     width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: color.withValues(alpha: 0.4),
+                      color: color.withOpacity(0.4),
                       blurRadius: 10,
                     ),
                   ],
@@ -297,9 +297,9 @@ class ColorsTab extends StatelessWidget {
   }
 
   String _hex(Color c) {
-    final r = (c.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (c.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (c.b * 255).round().toRadixString(16).padLeft(2, '0');
+    final r = (c.red * 255).round().toRadixString(16).padLeft(2, '0');
+    final g = (c.green * 255).round().toRadixString(16).padLeft(2, '0');
+    final b = (c.blue * 255).round().toRadixString(16).padLeft(2, '0');
     return '#$r$g$b'.toUpperCase();
   }
 }

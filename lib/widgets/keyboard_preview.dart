@@ -31,7 +31,7 @@ class KeyboardPreview extends StatelessWidget {
               color: project.keyboardSurface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: project.outline.withValues(alpha: 0.4),
+                color: project.outline.withOpacity(0.4),
                 width: 1,
               ),
             )

@@ -58,10 +58,10 @@ class _KeySizeEditorState extends State<KeySizeEditor> {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: AppColors.neonCyan.withValues(alpha: 0.15),
+                  color: AppColors.neonCyan.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: AppColors.neonCyan.withValues(alpha: 0.4),
+                    color: AppColors.neonCyan.withOpacity(0.4),
                   ),
                 ),
                 child: const Icon(
@@ -197,7 +197,7 @@ class _KeySizeEditorState extends State<KeySizeEditor> {
               data: SliderTheme.of(context).copyWith(
                 activeTrackColor: color,
                 thumbColor: color,
-                overlayColor: color.withValues(alpha: 0.2),
+                overlayColor: color.withOpacity(0.2),
                 trackHeight: 3,
               ),
               child: Slider(
@@ -321,7 +321,7 @@ class _KeySizeEditorState extends State<KeySizeEditor> {
           color: AppColors.darkSurface,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: color.withValues(alpha: 0.3),
+            color: color.withOpacity(0.3),
           ),
         ),
         child: Row(

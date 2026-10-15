@@ -73,7 +73,7 @@ class _OnlinePalettesScreenState extends State<OnlinePalettesScreen> {
         color: AppColors.darkBg,
         border: Border(
           bottom: BorderSide(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: Colors.white.withOpacity(0.05),
           ),
         ),
       ),
@@ -106,13 +106,13 @@ class _OnlinePalettesScreenState extends State<OnlinePalettesScreen> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? s.color.withValues(alpha: 0.15)
+                            ? s.color.withOpacity(0.15)
                             : AppColors.darkContainer,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: isSelected
                               ? s.color
-                              : Colors.white.withValues(alpha: 0.08),
+                              : Colors.white.withOpacity(0.08),
                           width: isSelected ? 1.5 : 1,
                         ),
                         boxShadow: isSelected

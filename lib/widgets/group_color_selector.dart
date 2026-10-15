@@ -74,7 +74,7 @@ class GroupColorSelector extends StatelessWidget {
                     border: Border.all(
                       color: !hasGradient
                           ? AppColors.neonCyan
-                          : Colors.white.withValues(alpha: 0.15),
+                          : Colors.white.withOpacity(0.15),
                       width: !hasGradient ? 2 : 1,
                     ),
                     boxShadow: !hasGradient
@@ -97,7 +97,7 @@ class GroupColorSelector extends StatelessWidget {
                         Text(
                           'لون واحد',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: Colors.white.withOpacity(0.9),
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                           ),
@@ -130,7 +130,7 @@ class GroupColorSelector extends StatelessWidget {
                     border: Border.all(
                       color: hasGradient
                           ? AppColors.neonPurple
-                          : Colors.white.withValues(alpha: 0.15),
+                          : Colors.white.withOpacity(0.15),
                       width: hasGradient ? 2 : 1,
                     ),
                     boxShadow: hasGradient
@@ -153,7 +153,7 @@ class GroupColorSelector extends StatelessWidget {
                         Text(
                           hasGradient ? gradient!.name : 'تدرج',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: Colors.white.withOpacity(0.9),
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                           ),

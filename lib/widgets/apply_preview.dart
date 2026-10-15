@@ -36,10 +36,10 @@ class ApplyPreview extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: AppColors.neonCyan.withValues(alpha: 0.1),
+            color: AppColors.neonCyan.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: AppColors.neonCyan.withValues(alpha: 0.3),
+              color: AppColors.neonCyan.withOpacity(0.3),
             ),
           ),
           child: Row(

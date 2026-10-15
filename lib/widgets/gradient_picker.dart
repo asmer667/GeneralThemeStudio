@@ -87,7 +87,7 @@ class _GradientPickerState extends State<GradientPicker> {
           border: Border.all(
             color: isSelected
                 ? AppColors.neonCyan
-                : Colors.white.withValues(alpha: 0.15),
+                : Colors.white.withOpacity(0.15),
             width: isSelected ? 3 : 1,
           ),
           boxShadow: isSelected
@@ -130,7 +130,7 @@ class _GradientPickerState extends State<GradientPicker> {
                   gradient: LinearGradient(
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.7),
+                      Colors.black.withOpacity(0.7),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -245,7 +245,7 @@ class _CustomGradientDialogState extends State<_CustomGradientDialog> {
                 ).toFlutterGradient(),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: Colors.white.withOpacity(0.2),
                   width: 1.5,
                 ),
                 boxShadow: AppColors.glow(AppColors.neonCyan, intensity: 0.4),
@@ -274,13 +274,13 @@ class _CustomGradientDialogState extends State<_CustomGradientDialog> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.neonCyan.withValues(alpha: 0.2)
+                              ? AppColors.neonCyan.withOpacity(0.2)
                               : AppColors.darkContainer,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: isSelected
                                 ? AppColors.neonCyan
-                                : Colors.white.withValues(alpha: 0.1),
+                                : Colors.white.withOpacity(0.1),
                           ),
                         ),
                         child: Text(
@@ -399,7 +399,7 @@ class _CustomGradientDialogState extends State<_CustomGradientDialog> {
           color: color,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.3),
+            color: Colors.white.withOpacity(0.3),
             width: 1.5,
           ),
           boxShadow: AppColors.glow(color, intensity: 0.3),
@@ -427,7 +427,7 @@ class _CustomGradientDialogState extends State<_CustomGradientDialog> {
           color: AppColors.darkContainer,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.15),
+            color: Colors.white.withOpacity(0.15),
           ),
         ),
         child: const Icon(
@@ -448,9 +448,9 @@ class _CustomGradientDialogState extends State<_CustomGradientDialog> {
   }
 
   Future<Color?> _showColorPicker(Color initial) async {
-    double r = initial.r * 255;
-    double g = initial.g * 255;
-    double b = initial.b * 255;
+    double r = initial.red * 255;
+    double g = initial.green * 255;
+    double b = initial.blue * 255;
 
     return showDialog<Color>(
       context: context,

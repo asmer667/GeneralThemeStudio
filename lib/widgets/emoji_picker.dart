@@ -249,7 +249,7 @@ class _EmojiPickerState extends State<EmojiPicker> {
           color: AppColors.darkContainer,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.06),
+            color: Colors.white.withOpacity(0.06),
           ),
         ),
         child: Text(
@@ -285,13 +285,13 @@ class EmojiQuickChip extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.neonCyan.withValues(alpha: 0.2)
+              ? AppColors.neonCyan.withOpacity(0.2)
               : AppColors.darkContainer,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? AppColors.neonCyan
-                : Colors.white.withValues(alpha: 0.08),
+                : Colors.white.withOpacity(0.08),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected

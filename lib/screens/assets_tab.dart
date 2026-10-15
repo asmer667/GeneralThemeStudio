@@ -58,10 +58,10 @@ class AssetsTab extends StatelessWidget {
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
-                          color: AppColors.neonPurple.withValues(alpha: 0.15),
+                          color: AppColors.neonPurple.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: AppColors.neonPurple.withValues(alpha: 0.4),
+                            color: AppColors.neonPurple.withOpacity(0.4),
                           ),
                         ),
                         child: const Icon(
@@ -159,7 +159,7 @@ class AssetsTab extends StatelessWidget {
               color: AppColors.darkSurface,
               borderRadius: BorderRadius.circular(11),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: Colors.white.withOpacity(0.15),
               ),
             ),
             child: const Icon(
@@ -219,12 +219,12 @@ class AssetsTab extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: hasIcon
-                      ? AppColors.neonGreen.withValues(alpha: 0.15)
+                      ? AppColors.neonGreen.withOpacity(0.15)
                       : AppColors.darkSurface,
                   borderRadius: BorderRadius.circular(9),
                   border: hasIcon
                       ? Border.all(
-                          color: AppColors.neonGreen.withValues(alpha: 0.4))
+                          color: AppColors.neonGreen.withOpacity(0.4))
                       : null,
                 ),
                 child: Icon(

@@ -30,18 +30,18 @@ class HexUtils {
 
   /// Color إلى HEX كامل
   static String toHex8(Color color) {
-    final r = _hex2(color.r);
-    final g = _hex2(color.g);
-    final b = _hex2(color.b);
-    final a = _hex2(color.a);
+    final r = _hex2(color.red);
+    final g = _hex2(color.green);
+    final b = _hex2(color.blue);
+    final a = _hex2(color.alpha);
     return '#$r$g$b$a'.toUpperCase();
   }
 
   /// Color إلى HEX بدون شفافية
   static String toHex6(Color color) {
-    final r = _hex2(color.r);
-    final g = _hex2(color.g);
-    final b = _hex2(color.b);
+    final r = _hex2(color.red);
+    final g = _hex2(color.green);
+    final b = _hex2(color.blue);
     return '#$r$g$b'.toUpperCase();
   }
 
@@ -64,17 +64,17 @@ class HexUtils {
 
   /// إلى RGB
   static Map<String, int> toRgb(Color color) => {
-        'r': (color.r * 255).round(),
-        'g': (color.g * 255).round(),
-        'b': (color.b * 255).round(),
+        'r': (color.red * 255).round(),
+        'g': (color.green * 255).round(),
+        'b': (color.blue * 255).round(),
       };
 
   /// إلى RGBA
   static Map<String, int> toRgba(Color color) => {
-        'r': (color.r * 255).round(),
-        'g': (color.g * 255).round(),
-        'b': (color.b * 255).round(),
-        'a': (color.a * 255).round(),
+        'r': (color.red * 255).round(),
+        'g': (color.green * 255).round(),
+        'b': (color.blue * 255).round(),
+        'a': (color.alpha * 255).round(),
       };
 
   /// من RGB

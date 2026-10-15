@@ -38,11 +38,11 @@ class AppColors {
   static const Color darkDivider = Color(0xFF223046);
 
   // Glass
-  static Color glassLight = Colors.white.withValues(alpha: 0.05);
-  static Color glassMedium = Colors.white.withValues(alpha: 0.08);
-  static Color glassHeavy = Colors.white.withValues(alpha: 0.14);
-  static Color glassBorder = Colors.white.withValues(alpha: 0.10);
-  static Color glassBorderBright = Colors.white.withValues(alpha: 0.22);
+  static Color glassLight = Colors.white.withOpacity(0.05);
+  static Color glassMedium = Colors.white.withOpacity(0.08);
+  static Color glassHeavy = Colors.white.withOpacity(0.14);
+  static Color glassBorder = Colors.white.withOpacity(0.10);
+  static Color glassBorderBright = Colors.white.withOpacity(0.22);
 
   // Light Backgrounds
   static const Color lightBg = Color(0xFFF5F8FC);
@@ -146,12 +146,12 @@ class AppColors {
   static List<BoxShadow> glow(Color color, {double intensity = 1.0}) {
     return [
       BoxShadow(
-        color: color.withValues(alpha: 0.4 * intensity),
+        color: color.withOpacity(0.4 * intensity),
         blurRadius: 16 * intensity,
         spreadRadius: 2,
       ),
       BoxShadow(
-        color: color.withValues(alpha: 0.2 * intensity),
+        color: color.withOpacity(0.2 * intensity),
         blurRadius: 32 * intensity,
         spreadRadius: 4,
       ),
@@ -160,12 +160,12 @@ class AppColors {
 
   static List<BoxShadow> softShadow = [
     BoxShadow(
-      color: Colors.black.withValues(alpha: 0.3),
+      color: Colors.black.withOpacity(0.3),
       blurRadius: 12,
       offset: const Offset(0, 4),
     ),
     BoxShadow(
-      color: Colors.black.withValues(alpha: 0.15),
+      color: Colors.black.withOpacity(0.15),
       blurRadius: 24,
       offset: const Offset(0, 8),
     ),

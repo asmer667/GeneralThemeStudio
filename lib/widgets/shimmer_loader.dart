@@ -314,7 +314,7 @@ class _SpinnerPainter extends CustomPainter {
     // 3 أقواس بأطوال مختلفة
     final sweep = 1.2;
 
-    paint.color = color.withValues(alpha: 0.3);
+    paint.color = color.withOpacity(0.3);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       0,
@@ -327,7 +327,7 @@ class _SpinnerPainter extends CustomPainter {
     paint.shader = SweepGradient(
       colors: [
         color,
-        color.withValues(alpha: 0.1),
+        color.withOpacity(0.1),
       ],
     ).createShader(Rect.fromCircle(center: center, radius: radius));
 

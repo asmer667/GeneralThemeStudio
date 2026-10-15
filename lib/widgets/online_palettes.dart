@@ -141,7 +141,7 @@ class _OnlinePalettesGridState extends State<OnlinePalettesGrid> {
             color: AppColors.darkContainer,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: Colors.white.withOpacity(0.08),
             ),
           ),
           child: Column(
@@ -198,7 +198,7 @@ class _OnlinePalettesGridState extends State<OnlinePalettesGrid> {
                                   color: c,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.white.withValues(alpha: 0.3),
+                                    color: Colors.white.withOpacity(0.3),
                                     width: 1.5,
                                   ),
                                 ),

@@ -57,7 +57,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: Colors.white.withValues(alpha: 0.08),
+            color: Colors.white.withOpacity(0.08),
             width: 1,
           ),
         ),
@@ -98,19 +98,19 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.darkContainer.withValues(alpha: 0.5),
+        fillColor: AppColors.darkContainer.withOpacity(0.5),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: Colors.white.withOpacity(0.1),
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: Colors.white.withOpacity(0.1),
             width: 1,
           ),
         ),
@@ -124,7 +124,7 @@ class AppTheme {
 
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.darkContainer,
-        selectedColor: AppColors.neonCyan.withValues(alpha: 0.2),
+        selectedColor: AppColors.neonCyan.withOpacity(0.2),
         disabledColor: AppColors.darkSurface,
         labelStyle: const TextStyle(
           color: AppColors.textDarkPrimary,
@@ -135,7 +135,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: Colors.white.withOpacity(0.1),
             width: 1,
           ),
         ),
@@ -143,7 +143,7 @@ class AppTheme {
       ),
 
       dividerTheme: DividerThemeData(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: Colors.white.withOpacity(0.08),
         thickness: 1,
         space: 1,
       ),
@@ -154,7 +154,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
           side: BorderSide(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: Colors.white.withOpacity(0.1),
             width: 1,
           ),
         ),
@@ -183,7 +183,7 @@ class AppTheme {
         activeTrackColor: AppColors.neonCyan,
         inactiveTrackColor: AppColors.darkDivider,
         thumbColor: AppColors.neonCyan,
-        overlayColor: AppColors.neonCyan.withValues(alpha: 0.2),
+        overlayColor: AppColors.neonCyan.withOpacity(0.2),
         valueIndicatorColor: AppColors.neonCyan,
       ),
 
@@ -196,7 +196,7 @@ class AppTheme {
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.neonCyan.withValues(alpha: 0.3);
+            return AppColors.neonCyan.withOpacity(0.3);
           }
           return AppColors.darkDivider;
         }),

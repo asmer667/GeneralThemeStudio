@@ -108,8 +108,8 @@ class _GlassCardState extends State<GlassCard>
                     gradient: widget.gradient ??
                         LinearGradient(
                           colors: [
-                            Colors.white.withValues(alpha: widget.opacity),
-                            Colors.white.withValues(alpha: widget.opacity * 0.5),
+                            Colors.white.withOpacity(widget.opacity),
+                            Colors.white.withOpacity(widget.opacity * 0.5),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -117,7 +117,7 @@ class _GlassCardState extends State<GlassCard>
                     borderRadius: BorderRadius.circular(widget.borderRadius),
                     border: widget.hasBorder
                         ? Border.all(
-                            color: Colors.white.withValues(alpha: 0.15),
+                            color: Colors.white.withOpacity(0.15),
                             width: 1,
                           )
                         : null,
@@ -163,7 +163,7 @@ class GlassCardWithGlow extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius),
               gradient: LinearGradient(
                 colors: [
-                  glowColor.withValues(alpha: 0.3),
+                  glowColor.withOpacity(0.3),
                   Colors.transparent,
                 ],
                 begin: Alignment.topCenter,
@@ -206,10 +206,10 @@ class GlassPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: filled ? c.withValues(alpha: 0.9) : c.withValues(alpha: 0.15),
+        color: filled ? c.withOpacity(0.9) : c.withOpacity(0.15),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: c.withValues(alpha: filled ? 0.9 : 0.4),
+          color: c.withOpacity(filled ? 0.9 : 0.4),
         ),
       ),
       child: Row(
@@ -261,9 +261,9 @@ class GlassStat extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
+              color: color.withOpacity(0.15),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: color.withValues(alpha: 0.3)),
+              border: Border.all(color: color.withOpacity(0.3)),
             ),
             child: Icon(icon, color: color, size: 18),
           ),

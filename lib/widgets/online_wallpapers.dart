@@ -198,7 +198,7 @@ class _OnlineWallpapersGridState extends State<OnlineWallpapersGrid> {
           color: AppColors.darkContainer,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.08),
+            color: Colors.white.withOpacity(0.08),
           ),
         ),
         child: ClipRRect(
@@ -246,7 +246,7 @@ class _OnlineWallpapersGridState extends State<OnlineWallpapersGrid> {
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        Colors.black.withValues(alpha: 0.8),
+                        Colors.black.withOpacity(0.8),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -268,7 +268,7 @@ class _OnlineWallpapersGridState extends State<OnlineWallpapersGrid> {
                       Text(
                         wallpaper.source,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: Colors.white.withOpacity(0.7),
                           fontSize: 9,
                         ),
                       ),
@@ -282,7 +282,7 @@ class _OnlineWallpapersGridState extends State<OnlineWallpapersGrid> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.5),
+                    color: Colors.black.withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

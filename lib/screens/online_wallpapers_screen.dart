@@ -110,7 +110,7 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
         color: AppColors.darkBg,
         border: Border(
           bottom: BorderSide(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: Colors.white.withOpacity(0.05),
           ),
         ),
       ),
@@ -143,13 +143,13 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.neonCyan.withValues(alpha: 0.2)
+                            ? AppColors.neonCyan.withOpacity(0.2)
                             : AppColors.darkContainer,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: isSelected
                               ? AppColors.neonCyan
-                              : Colors.white.withValues(alpha: 0.08),
+                              : Colors.white.withOpacity(0.08),
                           width: isSelected ? 1.5 : 1,
                         ),
                         boxShadow: isSelected
@@ -196,7 +196,7 @@ class _OnlineWallpapersScreenState extends State<OnlineWallpapersScreen> {
   Widget _buildDownloadOverlay() {
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withValues(alpha: 0.7),
+        color: Colors.black.withOpacity(0.7),
         child: Center(
           child: GlassCard(
             padding: const EdgeInsets.all(24),

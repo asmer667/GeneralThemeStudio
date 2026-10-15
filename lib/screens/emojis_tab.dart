@@ -64,10 +64,10 @@ class _EmojisTabState extends State<EmojisTab> {
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
-                          color: AppColors.neonCyan.withValues(alpha: 0.15),
+                          color: AppColors.neonCyan.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: AppColors.neonCyan.withValues(alpha: 0.4),
+                            color: AppColors.neonCyan.withOpacity(0.4),
                           ),
                         ),
                         child: const Icon(
@@ -178,13 +178,13 @@ class _EmojisTabState extends State<EmojisTab> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.neonCyan.withValues(alpha: 0.15)
+                ? AppColors.neonCyan.withOpacity(0.15)
                 : AppColors.darkSurface,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: isSelected
-                  ? AppColors.neonCyan.withValues(alpha: 0.5)
-                  : Colors.white.withValues(alpha: 0.05),
+                  ? AppColors.neonCyan.withOpacity(0.5)
+                  : Colors.white.withOpacity(0.05),
               width: isSelected ? 1.5 : 1,
             ),
           ),
@@ -195,7 +195,7 @@ class _EmojisTabState extends State<EmojisTab> {
                 height: 40,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.neonCyan.withValues(alpha: 0.2)
+                      ? AppColors.neonCyan.withOpacity(0.2)
                       : AppColors.darkContainer,
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -278,7 +278,7 @@ class _EmojisTabState extends State<EmojisTab> {
           color: AppColors.darkSurface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.08),
+            color: Colors.white.withOpacity(0.08),
           ),
         ),
         child: Text(emoji, style: const TextStyle(fontSize: 24)),

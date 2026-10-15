@@ -174,13 +174,13 @@ class _ApplyTargetSheetState extends State<ApplyTargetSheet> {
                 ),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? cat.color.withValues(alpha: 0.2)
+                      ? cat.color.withOpacity(0.2)
                       : AppColors.darkContainer,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: isActive
                         ? cat.color
-                        : Colors.white.withValues(alpha: 0.08),
+                        : Colors.white.withOpacity(0.08),
                     width: isActive ? 1.5 : 1,
                   ),
                   boxShadow: isActive
@@ -257,10 +257,10 @@ class _ApplyTargetSheetState extends State<ApplyTargetSheet> {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: cat.color.withValues(alpha: isSelected ? 0.25 : 0.12),
+                color: cat.color.withOpacity(isSelected ? 0.25 : 0.12),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: cat.color.withValues(alpha: isSelected ? 0.8 : 0.3),
+                  color: cat.color.withOpacity(isSelected ? 0.8 : 0.3),
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -320,7 +320,7 @@ class _ApplyTargetSheetState extends State<ApplyTargetSheet> {
         color: AppColors.darkBg,
         border: Border(
           top: BorderSide(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: Colors.white.withOpacity(0.05),
           ),
         ),
       ),

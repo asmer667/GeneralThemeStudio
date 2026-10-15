@@ -120,7 +120,7 @@ class _ExportScreenState extends State<ExportScreen> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(
@@ -252,9 +252,9 @@ class _ExportScreenState extends State<ExportScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.error.withValues(alpha: 0.1),
+        color: AppColors.error.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
+        border: Border.all(color: AppColors.error.withOpacity(0.4)),
       ),
       child: Row(
         children: [

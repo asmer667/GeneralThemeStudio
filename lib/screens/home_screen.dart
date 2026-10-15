@@ -385,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: AppColors.textDarkHint.withValues(alpha: 0.15),
+              color: AppColors.textDarkHint.withOpacity(0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -520,7 +520,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: AppColors.darkContainer,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: Colors.white.withOpacity(0.05),
                 ),
               ),
               child: Row(
@@ -540,7 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'General Theme Studio v1.0.0',
                     style: TextStyle(
-                      color: AppColors.textDarkHint.withValues(alpha: 0.7),
+                      color: AppColors.textDarkHint.withOpacity(0.7),
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                     ),

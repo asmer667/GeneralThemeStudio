@@ -64,7 +64,7 @@ class _ThemeCardState extends State<ThemeCard>
             color: AppColors.darkContainer,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: Colors.white.withOpacity(0.08),
             ),
           ),
           child: Padding(
@@ -92,7 +92,7 @@ class _ThemeCardState extends State<ThemeCard>
           color: AppColors.darkContainer,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.08),
+            color: Colors.white.withOpacity(0.08),
           ),
         ),
         child: Column(
@@ -148,12 +148,12 @@ class _ThemeCardState extends State<ThemeCard>
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: widget.project.primary.withValues(alpha: 0.5),
+          color: widget.project.primary.withOpacity(0.5),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: widget.project.primary.withValues(alpha: 0.3),
+            color: widget.project.primary.withOpacity(0.3),
             blurRadius: 10,
           ),
         ],
@@ -193,7 +193,7 @@ class _ThemeCardState extends State<ThemeCard>
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: widget.project.primary.withValues(alpha: 0.5),
+                color: widget.project.primary.withOpacity(0.5),
                 blurRadius: 12,
               ),
             ],
@@ -253,7 +253,7 @@ class _ThemeCardState extends State<ThemeCard>
       color: AppColors.darkContainerHigh,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+        side: BorderSide(color: Colors.white.withOpacity(0.1)),
       ),
       onSelected: (v) {
         switch (v) {

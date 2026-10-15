@@ -118,8 +118,8 @@ class _AuroraPainter extends CustomPainter {
       final paint = Paint()
         ..shader = RadialGradient(
           colors: [
-            color.withValues(alpha: 0.15 * intensity),
-            color.withValues(alpha: 0.05 * intensity),
+            color.withOpacity(0.15 * intensity),
+            color.withOpacity(0.05 * intensity),
             Colors.transparent,
           ],
           stops: const [0.0, 0.4, 1.0],
@@ -142,7 +142,7 @@ class _AuroraPainter extends CustomPainter {
       final paint = Paint()
         ..shader = RadialGradient(
           colors: [
-            color.withValues(alpha: 0.10 * intensity),
+            color.withOpacity(0.10 * intensity),
             Colors.transparent,
           ],
         ).createShader(
@@ -261,8 +261,8 @@ class _WavesPainter extends CustomPainter {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            color.withValues(alpha: 0.15),
-            color.withValues(alpha: 0.02),
+            color.withOpacity(0.15),
+            color.withOpacity(0.02),
           ],
         ).createShader(Rect.fromLTWH(0, yOffset, size.width, size.height - yOffset))
         ..blendMode = BlendMode.plus;
@@ -343,7 +343,7 @@ class _DotsPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const spacing = 32.0;
     final paint = Paint()
-      ..color = color.withValues(alpha: 0.08);
+      ..color = color.withOpacity(0.08);
 
     final offsetX = (progress * spacing) % spacing;
     final offsetY = (progress * spacing * 0.7) % spacing;

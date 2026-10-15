@@ -67,7 +67,7 @@ class KeysTab extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: (border?.backgroundTint ?? AppColors.neonCyan)
-                        .withValues(alpha: 0.2),
+                        .withOpacity(0.2),
                     borderRadius: BorderRadius.circular(11),
                     border: Border.all(
                       color: border?.borderColor ?? AppColors.neonCyan,
@@ -75,7 +75,7 @@ class KeysTab extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: (border?.backgroundTint ?? AppColors.neonCyan)
-                            .withValues(alpha: 0.3),
+                            .withOpacity(0.3),
                         blurRadius: 10,
                       ),
                     ],
@@ -298,7 +298,7 @@ class KeysTab extends StatelessWidget {
               color: AppColors.darkSurface,
               borderRadius: BorderRadius.circular(11),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: Colors.white.withOpacity(0.15),
               ),
             ),
             child: const Icon(

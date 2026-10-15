@@ -41,13 +41,13 @@ class GoogleFontCard extends StatelessWidget {
         border: Border.all(
           color: isSelected
               ? AppColors.primary
-              : Colors.white.withValues(alpha: 0.08),
+              : Colors.white.withOpacity(0.08),
           width: isSelected ? 2 : 1,
         ),
         boxShadow: isSelected
             ? [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.3),
+                  color: AppColors.primary.withOpacity(0.3),
                   blurRadius: 12,
                 ),
               ]
@@ -62,10 +62,10 @@ class GoogleFontCard extends StatelessWidget {
                 width: 52,
                 height: 52,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
+                  color: AppColors.primary.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.3),
+                    color: AppColors.primary.withOpacity(0.3),
                   ),
                 ),
                 child: Center(
@@ -190,7 +190,7 @@ class GoogleFontCard extends StatelessWidget {
       icon: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.15),
+          color: AppColors.primary.withOpacity(0.15),
           shape: BoxShape.circle,
         ),
         child: const Icon(
@@ -207,9 +207,9 @@ class GoogleFontCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
+        color: color.withOpacity(0.15),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withValues(alpha: 0.4)),
+        border: Border.all(color: color.withOpacity(0.4)),
       ),
       child: Text(
         text,
@@ -258,13 +258,13 @@ class LocalFontCard extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? AppColors.primary
-                : Colors.white.withValues(alpha: 0.08),
+                : Colors.white.withOpacity(0.08),
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.3),
+                    color: AppColors.primary.withOpacity(0.3),
                     blurRadius: 12,
                   ),
                 ]
@@ -276,10 +276,10 @@ class LocalFontCard extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.15),
+                color: AppColors.primary.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.3),
+                  color: AppColors.primary.withOpacity(0.3),
                 ),
               ),
               child: Center(

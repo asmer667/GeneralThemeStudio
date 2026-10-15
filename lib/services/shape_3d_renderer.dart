@@ -160,7 +160,7 @@ class Shape3DRenderer {
       canvas.drawPath(
         hl,
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.08 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.08 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -205,8 +205,8 @@ class Shape3DRenderer {
         Paint()
           ..shader = RadialGradient(
             colors: [
-              Colors.white.withValues(alpha: 0.7 * settings.highlightIntensity),
-              Colors.white.withValues(alpha: 0.0),
+              Colors.white.withOpacity(0.7 * settings.highlightIntensity),
+              Colors.white.withOpacity(0.0),
             ],
           ).createShader(Rect.fromCircle(center: hlCenter, radius: radius * 0.20)),
       );
@@ -221,7 +221,7 @@ class Shape3DRenderer {
           ..shader = RadialGradient(
             colors: [
               Colors.transparent,
-              Colors.black.withValues(alpha: 0.3 * settings.shadowIntensity),
+              Colors.black.withOpacity(0.3 * settings.shadowIntensity),
             ],
           ).createShader(Rect.fromCircle(center: shadowCenter, radius: radius * 0.5))
           ..blendMode = BlendMode.multiply,
@@ -285,7 +285,7 @@ class Shape3DRenderer {
           height: ellipseH * 0.4,
         ),
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.15 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.15 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -333,7 +333,7 @@ class Shape3DRenderer {
           ..lineTo(cx, baseY * 0.95)
           ..close(),
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.10 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.10 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -387,7 +387,7 @@ class Shape3DRenderer {
           ..lineTo(cx + w * 0.05, apexY + h * 0.12)
           ..close(),
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.25 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.25 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -524,7 +524,7 @@ class Shape3DRenderer {
       canvas.drawPath(
         topLeft,
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.30 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.30 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -581,7 +581,7 @@ class Shape3DRenderer {
       canvas.drawPath(
         glow,
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.25 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.25 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -639,7 +639,7 @@ class Shape3DRenderer {
           Radius.circular(r * 0.5),
         ),
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.20 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.20 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -777,7 +777,7 @@ class Shape3DRenderer {
           height: ry * 0.4,
         ),
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.15 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.15 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }
@@ -877,7 +877,7 @@ class Shape3DRenderer {
           height: h * 0.15,
         ),
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.30 * settings.highlightIntensity)
+          ..color = Colors.white.withOpacity(0.30 * settings.highlightIntensity)
           ..blendMode = BlendMode.plus,
       );
     }

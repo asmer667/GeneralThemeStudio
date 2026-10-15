@@ -33,7 +33,7 @@ class GradientPreviewCard extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? AppColors.neonCyan
-                : Colors.white.withValues(alpha: 0.15),
+                : Colors.white.withOpacity(0.15),
             width: isSelected ? 3 : 1,
           ),
           boxShadow: isSelected
@@ -72,7 +72,7 @@ class GradientPreviewCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.5),
+                      color: Colors.black.withOpacity(0.5),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -96,7 +96,7 @@ class GradientPreviewCard extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.7),
+                      Colors.black.withOpacity(0.7),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -182,7 +182,7 @@ class GradientMiniBar extends StatelessWidget {
         gradient: gradient.toFlutterGradient(),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.2),
+          color: Colors.white.withOpacity(0.2),
         ),
       ),
     );
@@ -227,7 +227,7 @@ class GradientWheel extends StatelessWidget {
                 border: Border.all(
                   color: isSelected
                       ? AppColors.neonCyan
-                      : Colors.white.withValues(alpha: 0.2),
+                      : Colors.white.withOpacity(0.2),
                   width: isSelected ? 3 : 1,
                 ),
                 boxShadow: isSelected

@@ -65,20 +65,20 @@ class _QuickActionCardState extends State<QuickActionCard>
             gradient: widget.gradient ??
                 LinearGradient(
                   colors: [
-                    widget.color.withValues(alpha: 0.25),
-                    widget.color.withValues(alpha: 0.10),
+                    widget.color.withOpacity(0.25),
+                    widget.color.withOpacity(0.10),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
-              color: widget.color.withValues(alpha: 0.4),
+              color: widget.color.withOpacity(0.4),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withValues(alpha: 0.3),
+                color: widget.color.withOpacity(0.3),
                 blurRadius: 16,
                 spreadRadius: -4,
               ),
@@ -93,10 +93,10 @@ class _QuickActionCardState extends State<QuickActionCard>
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: widget.color.withValues(alpha: 0.2),
+                    color: widget.color.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: widget.color.withValues(alpha: 0.5),
+                      color: widget.color.withOpacity(0.5),
                       width: 1.5,
                     ),
                     boxShadow: AppColors.glow(widget.color, intensity: 0.4),
@@ -194,7 +194,7 @@ class _LibraryCardState extends State<LibraryCard>
             color: AppColors.darkContainer,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: widget.color.withValues(alpha: 0.25),
+              color: widget.color.withOpacity(0.25),
               width: 1.5,
             ),
           ),
@@ -210,10 +210,10 @@ class _LibraryCardState extends State<LibraryCard>
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: widget.color.withValues(alpha: 0.15),
+                        color: widget.color.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: widget.color.withValues(alpha: 0.4),
+                          color: widget.color.withOpacity(0.4),
                         ),
                       ),
                       child: Icon(
@@ -230,10 +230,10 @@ class _LibraryCardState extends State<LibraryCard>
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: widget.color.withValues(alpha: 0.2),
+                          color: widget.color.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: widget.color.withValues(alpha: 0.5),
+                            color: widget.color.withOpacity(0.5),
                           ),
                         ),
                         child: Text(
@@ -304,7 +304,7 @@ class StatBadge extends StatelessWidget {
         color: AppColors.darkContainer,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withValues(alpha: 0.25),
+          color: color.withOpacity(0.25),
         ),
       ),
       child: Row(
@@ -314,10 +314,10 @@ class StatBadge extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
+              color: color.withOpacity(0.15),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: color.withValues(alpha: 0.3),
+                color: color.withOpacity(0.3),
               ),
             ),
             child: Icon(icon, color: color, size: 16),
@@ -370,9 +370,9 @@ class SeeAllCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
+          color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

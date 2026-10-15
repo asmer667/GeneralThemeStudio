@@ -110,19 +110,19 @@ class _ShapeTileState extends State<_ShapeTile>
           duration: AppAnimations.fast,
           decoration: BoxDecoration(
             color: widget.isSelected
-                ? AppColors.primary.withValues(alpha: 0.15)
+                ? AppColors.primary.withOpacity(0.15)
                 : AppColors.darkContainer,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: widget.isSelected
                   ? AppColors.primary
-                  : Colors.white.withValues(alpha: 0.08),
+                  : Colors.white.withOpacity(0.08),
               width: widget.isSelected ? 2 : 1,
             ),
             boxShadow: widget.isSelected
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.3),
+                      color: AppColors.primary.withOpacity(0.3),
                       blurRadius: 12,
                       spreadRadius: 1,
                     ),
@@ -247,19 +247,19 @@ class _CategoryChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? color.withValues(alpha: 0.2)
+              ? color.withOpacity(0.2)
               : AppColors.darkContainer,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected
-                ? color.withValues(alpha: 0.5)
-                : Colors.white.withValues(alpha: 0.08),
+                ? color.withOpacity(0.5)
+                : Colors.white.withOpacity(0.08),
             width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: color.withValues(alpha: 0.2),
+                    color: color.withOpacity(0.2),
                     blurRadius: 8,
                   ),
                 ]

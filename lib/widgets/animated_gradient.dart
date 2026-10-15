@@ -134,8 +134,8 @@ class _AuroraBackgroundState extends State<AuroraBackground>
               ),
               radius: 1.5,
               colors: [
-                widget.colors[0].withValues(alpha: 0.20),
-                widget.colors[1].withValues(alpha: 0.10),
+                widget.colors[0].withOpacity(0.20),
+                widget.colors[1].withOpacity(0.10),
                 AppColors.darkBg,
               ],
               stops: const [0.0, 0.4, 1.0],
@@ -150,8 +150,8 @@ class _AuroraBackgroundState extends State<AuroraBackground>
                 ),
                 radius: 1.5,
                 colors: [
-                  widget.colors[2].withValues(alpha: 0.15),
-                  widget.colors[3].withValues(alpha: 0.08),
+                  widget.colors[2].withOpacity(0.15),
+                  widget.colors[3].withOpacity(0.08),
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.4, 1.0],
@@ -247,8 +247,8 @@ class _MeshGradientBackgroundState extends State<MeshGradientBackground>
               center: Alignment(-0.5 + t * 1.0, -0.5 + t * 0.5),
               radius: 1.8,
               colors: [
-                widget.colors[0].withValues(alpha: 0.15),
-                widget.colors[1].withValues(alpha: 0.08),
+                widget.colors[0].withOpacity(0.15),
+                widget.colors[1].withOpacity(0.08),
                 Colors.transparent,
               ],
               stops: const [0.0, 0.5, 1.0],
@@ -260,8 +260,8 @@ class _MeshGradientBackgroundState extends State<MeshGradientBackground>
                 center: Alignment(0.5 - t * 1.0, 0.5 - t * 0.5),
                 radius: 1.8,
                 colors: [
-                  widget.colors[2].withValues(alpha: 0.12),
-                  widget.colors[3].withValues(alpha: 0.06),
+                  widget.colors[2].withOpacity(0.12),
+                  widget.colors[3].withOpacity(0.06),
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.5, 1.0],

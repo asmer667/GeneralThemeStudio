@@ -133,7 +133,7 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
             width: 44,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.textDarkHint.withValues(alpha: 0.5),
+              color: AppColors.textDarkHint.withOpacity(0.5),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -159,7 +159,7 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
               gradient: widget.previewGradient?.toFlutterGradient(),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: Colors.white.withOpacity(0.2),
                 width: 1.5,
               ),
               boxShadow: AppColors.glow(
@@ -239,10 +239,10 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.neonPurple.withValues(alpha: 0.15),
+                        color: AppColors.neonPurple.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: AppColors.neonPurple.withValues(alpha: 0.4),
+                          color: AppColors.neonPurple.withOpacity(0.4),
                         ),
                       ),
                       child: Text(
@@ -368,7 +368,7 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
               color: AppColors.darkContainer,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: AppColors.neonCyan.withValues(alpha: 0.4),
+                color: AppColors.neonCyan.withOpacity(0.4),
               ),
             ),
             child: const Row(
@@ -407,13 +407,13 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? cat.color.withValues(alpha: 0.2)
+              ? cat.color.withOpacity(0.2)
               : AppColors.darkContainer,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected
                 ? cat.color
-                : Colors.white.withValues(alpha: 0.1),
+                : Colors.white.withOpacity(0.1),
             width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected
@@ -450,10 +450,10 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: cat.color.withValues(alpha: 0.1),
+        color: cat.color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: cat.color.withValues(alpha: 0.4),
+          color: cat.color.withOpacity(0.4),
         ),
       ),
       child: Row(
@@ -462,7 +462,7 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: cat.color.withValues(alpha: 0.2),
+              color: cat.color.withOpacity(0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(target.icon, color: cat.color, size: 18),
@@ -526,7 +526,7 @@ class _PreviewBottomSheetState extends State<PreviewBottomSheet> {
         color: AppColors.darkSurface,
         border: Border(
           top: BorderSide(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: Colors.white.withOpacity(0.05),
           ),
         ),
       ),

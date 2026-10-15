@@ -97,24 +97,24 @@ class _NeonButtonState extends State<NeonButton>
           gradient: widget.outlined
               ? null
               : LinearGradient(
-                  colors: [c, c.withValues(alpha: 0.75)],
+                  colors: [c, c.withOpacity(0.75)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
           color: widget.outlined ? Colors.transparent : null,
           border: widget.outlined
-              ? Border.all(color: c.withValues(alpha: 0.6), width: 1.5)
+              ? Border.all(color: c.withOpacity(0.6), width: 1.5)
               : null,
           boxShadow: widget.outlined || widget.onPressed == null
               ? null
               : [
                   BoxShadow(
-                    color: c.withValues(alpha: 0.35),
+                    color: c.withOpacity(0.35),
                     blurRadius: 12,
                     spreadRadius: 1,
                   ),
                   BoxShadow(
-                    color: c.withValues(alpha: 0.15),
+                    color: c.withOpacity(0.15),
                     blurRadius: 24,
                     spreadRadius: 3,
                   ),
@@ -231,10 +231,10 @@ class _NeonIconButtonState extends State<NeonIconButton>
         width: widget.size,
         height: widget.size,
         decoration: BoxDecoration(
-          color: widget.filled ? c : c.withValues(alpha: 0.15),
+          color: widget.filled ? c : c.withOpacity(0.15),
           shape: BoxShape.circle,
           border: Border.all(
-            color: c.withValues(alpha: 0.4),
+            color: c.withOpacity(0.4),
             width: 1,
           ),
           boxShadow: widget.filled
@@ -297,7 +297,7 @@ class NeonSegmented extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.darkContainer,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: Colors.white.withOpacity(0.08)),
       ),
       child: Row(
         children: List.generate(labels.length, (i) {
@@ -310,15 +310,15 @@ class NeonSegmented extends StatelessWidget {
                 curve: AppAnimations.emphasized,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: isSelected ? c.withValues(alpha: 0.2) : Colors.transparent,
+                  color: isSelected ? c.withOpacity(0.2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                   border: isSelected
-                      ? Border.all(color: c.withValues(alpha: 0.5))
+                      ? Border.all(color: c.withOpacity(0.5))
                       : null,
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: c.withValues(alpha: 0.2),
+                            color: c.withOpacity(0.2),
                             blurRadius: 8,
                           ),
                         ]
@@ -378,16 +378,16 @@ class NeonChip extends StatelessWidget {
       duration: AppAnimations.fast,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? c.withValues(alpha: 0.2) : AppColors.darkContainer,
+        color: selected ? c.withOpacity(0.2) : AppColors.darkContainer,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: selected ? c.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
+          color: selected ? c.withOpacity(0.5) : Colors.white.withOpacity(0.08),
           width: selected ? 1.5 : 1,
         ),
         boxShadow: selected
             ? [
                 BoxShadow(
-                  color: c.withValues(alpha: 0.2),
+                  color: c.withOpacity(0.2),
                   blurRadius: 8,
                 ),
               ]
