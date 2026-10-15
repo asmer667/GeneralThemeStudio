@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import '../models/background_asset.dart';
 import '../models/key_group.dart';
 import '../models/key_shape.dart';
 import '../models/theme_project.dart';
@@ -24,36 +27,81 @@ class KeyboardPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(16);
     return Container(
       padding: padding,
       decoration: showBorder
           ? BoxDecoration(
               color: project.keyboardSurface,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: radius,
               border: Border.all(
                 color: project.outline.withOpacity(0.4),
                 width: 1,
               ),
             )
           : null,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildRow1(),
-          SizedBox(height: 6 * scale),
-          _buildRow2(),
-          SizedBox(height: 6 * scale),
-          _buildRow3(),
-          SizedBox(height: 6 * scale),
-          _buildRow4(),
-        ],
+      child: ClipRRect(
+        borderRadius: radius,
+        child: Stack(
+          children: [
+            Positioned.fill(child: _buildBackgroundLayer()),
+            Container(
+              color: _hasImageBackground ? project.keyboardSurface.withOpacity(0.28) : Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildRow1(),
+                  SizedBox(height: 6 * scale),
+                  _buildRow2(),
+                  SizedBox(height: 6 * scale),
+                  _buildRow3(),
+                  SizedBox(height: 6 * scale),
+                  _buildRow4(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
+  bool get _hasImageBackground {
+    final bg = project.backgroundAsset;
+    return bg != null &&
+        (bg.type == BackgroundType.image || bg.type == BackgroundType.builtin) &&
+        bg.imagePath != null;
+  }
+
+  Widget _buildBackgroundLayer() {
+    final bg = project.backgroundAsset;
+    if (bg == null) return Container(color: project.keyboardSurface);
+    if (bg.type == BackgroundType.color) return Container(color: bg.solidColor ?? project.keyboardSurface);
+    if (bg.type == BackgroundType.gradient) {
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: bg.gradientColors ?? [project.keyboardSurface],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      );
+    }
+    if (bg.type == BackgroundType.image || bg.type == BackgroundType.builtin) {
+      final path = bg.imagePath;
+      if (path == null) return Container(color: project.keyboardSurface);
+      final Widget image = bg.type == BackgroundType.builtin && path.startsWith('assets/')
+          ? Image.asset(path, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: project.keyboardSurface))
+          : Image.file(File(path), fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: project.keyboardSurface));
+      return Opacity(opacity: bg.opacity.clamp(0.0, 1.0).toDouble(), child: image);
+    }
+    return Container(color: project.keyboardSurface);
+  }
+
   Widget _buildRow1() {
     final letters = ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج'];
-    return _row(letters.map((l) => _letter(l)).toList());
+    return _row(letters.map((l) => _letter(l, groupSelector: 'normal row 0')).toList());
   }
 
   Widget _buildRow2() {
@@ -64,21 +112,21 @@ class KeyboardPreview extends StatelessWidget {
   Widget _buildRow3() {
     final letters = ['ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'و', 'ز', 'ظ', 'د'];
     final keys = <KeyData>[
-      _iconKey(Icons.keyboard_arrow_up, 'functional'),
+      _iconKey(Icons.keyboard_arrow_up, 'icon shift_key'),
       ...letters.map((l) => _letter(l)),
-      _iconKey(Icons.backspace_outlined, 'functional'),
+      _iconKey(Icons.backspace_outlined, 'icon delete_key'),
     ];
     return _row(keys);
   }
 
   Widget _buildRow4() {
     return _row([
-      _letter('?123', groupSelector: 'functional', wide: 1.4),
-      _letter('،', groupSelector: 'functional'),
-      _iconKey(Icons.emoji_emotions_outlined, 'functional'),
+      _letter('?123', groupSelector: 'functional row -1 col 0', wide: 1.4),
+      _letter('،', groupSelector: 'functional row -1 col 1'),
+      _iconKey(Icons.emoji_emotions_outlined, 'icon action_emoji'),
       _letter('مسافة', groupSelector: 'spacebar', wide: 4.5),
-      _letter('.', groupSelector: 'functional'),
-      _iconKey(Icons.keyboard_return, 'functional'),
+      _letter('.', groupSelector: 'functional row -1 col -1'),
+      _iconKey(Icons.keyboard_return, 'icon enter_key'),
     ]);
   }
 
@@ -105,6 +153,7 @@ class KeyboardPreview extends StatelessWidget {
       fontSize: 15 * scale,
       borderColor: border,
       borderWidth: bw,
+      backgroundImagePath: group?.border?.customImagePath,
     );
   }
 
@@ -126,6 +175,7 @@ class KeyboardPreview extends StatelessWidget {
       height: 48 * scale,
       borderColor: border,
       borderWidth: bw,
+      backgroundImagePath: group?.border?.customImagePath,
     );
   }
 
@@ -155,6 +205,8 @@ class KeyboardPreview extends StatelessWidget {
             width: keys[i].width,
             height: keys[i].height,
             fontSize: keys[i].fontSize,
+            fontFamily: project.fontName,
+            backgroundImagePath: keys[i].backgroundImagePath,
           ),
           if (i < keys.length - 1) SizedBox(width: 3 * scale),
         ],

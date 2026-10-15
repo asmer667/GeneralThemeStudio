@@ -113,7 +113,7 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
       selection: selection,
     );
 
-    provider.loadProject(updated);
+    provider.replaceProject(updated);
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -146,7 +146,7 @@ class _ColorStudioScreenState extends State<ColorStudioScreen>
       selection: selection,
     );
 
-    provider.loadProject(updated);
+    provider.replaceProject(updated);
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

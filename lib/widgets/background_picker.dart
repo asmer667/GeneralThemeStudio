@@ -86,10 +86,8 @@ class _BackgroundPickerState extends State<BackgroundPicker>
         _uploaded.add(bg);
       });
 
-      widget.onSelected(bg);
-
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم رفع الخلفية')),
+        const SnackBar(content: Text('تم رفع الخلفية. اخترها من القائمة لتحديد مكان تطبيقها.')),
       );
     } catch (e) {
       if (!mounted) return;
@@ -344,6 +342,16 @@ class _BackgroundPickerState extends State<BackgroundPicker>
       case BackgroundType.image:
       case BackgroundType.builtin:
         if (bg.imagePath == null) return Container(color: Colors.grey);
+        if (bg.type == BackgroundType.builtin && bg.imagePath!.startsWith('assets/')) {
+          return Image.asset(
+            bg.imagePath!,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              color: AppColors.darkContainer,
+              child: const Icon(Icons.broken_image),
+            ),
+          );
+        }
         final file = File(bg.imagePath!);
         if (file.existsSync()) {
           return Image.file(

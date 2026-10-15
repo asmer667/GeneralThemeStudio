@@ -3,10 +3,10 @@ class AppConstants {
   AppConstants._();
 
   // App Info
-  static const String appName = 'General Theme Studio';
+  static const String appName = 'FutoThemeStudio';
   static const String appVersion = '1.0.0';
   static const String appBuildNumber = '1';
-  static const String appAuthor = 'General Studio';
+  static const String appAuthor = 'FutoThemeStudio contributors';
 
   // FUTO Theme Format
   static const String themeFormatVersion = '1.0';

@@ -1,37 +1,35 @@
-# General Theme Studio
+# FutoThemeStudio (General Theme Studio)
 
-> Professional Flutter application for creating, editing, and exporting custom themes for FUTO Keyboard.
+Flutter/Dart Android app for creating, previewing, importing, and exporting advanced FUTO Keyboard themes.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Flutter](https://img.shields.io/badge/Flutter-3.24.5-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+## Current project contents
 
-## Features
+- Arabic/English keyboard preview with live theme colors, shapes, and selected font family.
+- Apply-target chooser for all keys, writing keys, top/bottom rows, functional keys, individual common keys, custom selectors, and background targets.
+- 50 bundled illustrated wallpaper images plus gradient/solid backgrounds.
+- Import a background from the device, browse real Picsum image results, or download from a direct image URL.
+- Bundled fonts that actually exist in `assets/fonts/` (DejaVu Sans, DejaVu Sans Mono, FreeSans, FreeSerif), with local font import and an online Google Fonts catalog when reachable.
+- Theme library persistence and auto-save.
+- ZIP export with generated key assets, `theme.txt`, a PNG background, and selected font bytes when available.
+- ZIP import reads nested `[options.font]` and `[options.background]` sections and extracts included background/font files for later editing.
+- GitHub Actions workflow to generate the Android project and build an installable release APK artifact.
 
-- **Theme Editor**: Create and edit complete FUTO Keyboard themes
-- **Per-Key Customization**: Customize each key individually or in groups
-- **Key Groups**: Apply styles to entire rows or specific key types
-- **Live Preview**: Real-time preview of your theme on a full Arabic keyboard
-- **Shapes Library**: 20+ geometric shapes + custom shapes (mouse, cat, etc.)
-- **State Support**: Normal / Pressed / Long-press / Functional states
-- **Color Library**: Full color picker with gradients
-- **Font Manager**: Support for custom Arabic fonts
-- **ZIP Export**: Fully compatible with FUTO Keyboard import format
-- **Theme Import**: Import and edit existing themes
-- **Theme Manager**: Save, organize, and share your themes
+## Build from GitHub on a phone
 
-## Architecture
+1. Upload/push the contents of this repository to GitHub.
+2. Open **Actions** and run **Build General Theme Studio APK**, or push to `main`/`master`.
+3. Open the completed workflow run and download the `general-theme-studio-apk` artifact.
 
-## Tech Stack
+The workflow produces an installable APK artifact for device testing. It is not configured with your private Google Play release key; publishing to Google Play requires configuring your own release keystore and signing secrets.
 
-- **Framework**: Flutter 3.24.5
-- **Language**: Dart 3.3+
-- **State Management**: Provider
-- **Storage**: SharedPreferences, PathProvider
-- **File Operations**: FilePicker, Archive
-- **Image Generation**: Image package
-- **UI**: Material 3
+## FUTO compatibility note
+
+The exporter follows the documented advanced-theme structure, including `# Format version: 1.0`, `[options.font]`, and `[options.background]`. Advanced themes require FUTO Keyboard v0.1.30 or later according to the official documentation. Always import-test exported ZIPs in the target FUTO Keyboard version before distributing them; this repository has not yet been validated against every FUTO release or every possible TOML asset rule.
+
+## Network notes
+
+Online browsing/download features require internet access. Bundled backgrounds and bundled fonts work offline. The online font catalog can fall back to the bundled list if its remote catalog is unreachable. Downloaded font files must be TTF/OTF for Flutter preview support.
 
 ## License
 
-MIT License - Copyright (c) 2026
+The application source is MIT. Bundled font licenses/attributions are documented in `assets/fonts/LICENSES.txt`. Wallpaper assets are generated for this project.

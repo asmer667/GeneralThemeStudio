@@ -135,9 +135,9 @@ extension ApplyTargetExt on ApplyTarget {
       case ApplyTarget.lettersRow:
         return 'normal';
       case ApplyTarget.topRow:
-        return 'top row';
+        return 'normal row 0';
       case ApplyTarget.bottomRow:
-        return 'bottom row';
+        return 'normal row -1';
       case ApplyTarget.functionalKeys:
         return 'functional';
       case ApplyTarget.deleteKey:

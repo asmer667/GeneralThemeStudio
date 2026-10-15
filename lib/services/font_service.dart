@@ -118,7 +118,7 @@ class FontService {
       final entities = await customDir.list().toList();
       final files = entities.whereType<File>().where((e) {
         final ext = e.path.split('.').last.toLowerCase();
-        return ['ttf', 'otf', 'woff', 'woff2'].contains(ext);
+        return ['ttf', 'otf'].contains(ext);
       }).toList();
 
       final result = <CustomFontInfo>[];
@@ -160,16 +160,19 @@ class FontService {
 
   static Future<bool> loadFontForPreview(String family, String filePath) async {
     try {
-      final file = File(filePath);
-      if (!await file.exists()) return false;
-
-      final bytes = await file.readAsBytes();
-      final data = ByteData.view(bytes.buffer);
-
+      Uint8List bytes;
+      if (filePath.startsWith('assets/')) {
+        final data = await rootBundle.load(filePath);
+        bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      } else {
+        final file = File(filePath);
+        if (!await file.exists()) return false;
+        bytes = await file.readAsBytes();
+      }
+      final data = ByteData.view(bytes.buffer, bytes.offsetInBytes, bytes.lengthInBytes);
       final loader = FontLoader(family);
       loader.addFont(Future.value(data));
       await loader.load();
-
       return true;
     } catch (e) {
       debugPrint('loadFontForPreview error: $e');
@@ -239,7 +242,7 @@ class FontService {
 
   static bool isValidExtension(String path) {
     final ext = path.split('.').last.toLowerCase();
-    return ['ttf', 'otf', 'woff', 'woff2'].contains(ext);
+    return ['ttf', 'otf'].contains(ext);
   }
 
   static bool isValidSize(int bytes) {

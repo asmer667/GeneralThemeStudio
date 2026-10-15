@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'General Theme Studio',
+                  'FutoThemeStudio',
                   style: TextStyle(
                     color: AppColors.textDarkPrimary,
                     fontSize: 17,

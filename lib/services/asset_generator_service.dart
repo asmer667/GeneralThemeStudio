@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../core/constants.dart';
@@ -21,31 +22,48 @@ class AssetGeneratorService {
   static Future<Uint8List> generateBorderPng(BorderAsset asset) async {
     final width = AppConstants.borderAssetWidth.toDouble();
     final height = AppConstants.borderAssetHeight.toDouble();
-
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
+    final path = ShapeRenderer.render(
+      asset.shape, Size(width, height), roundedness: 0.5,
+    );
 
-    if (asset.shape.is3D) {
-      final settings = Shape3DSettings.fromColor(asset.effectiveColor)
-          .copyWith(
+    if (asset.customImagePath != null) {
+      try {
+        Uint8List bytes;
+        if (asset.customImagePath!.startsWith('assets/')) {
+          final data = await rootBundle.load(asset.customImagePath!);
+          bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+        } else {
+          bytes = await File(asset.customImagePath!).readAsBytes();
+        }
+        final codec = await ui.instantiateImageCodec(
+          bytes, targetWidth: width.toInt(), targetHeight: height.toInt(),
+        );
+        final frame = await codec.getNextFrame();
+        final image = frame.image;
+        canvas.save();
+        canvas.clipPath(path);
+        canvas.drawImageRect(
+          image,
+          Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+          Rect.fromLTWH(0, 0, width, height),
+          Paint()..filterQuality = FilterQuality.high,
+        );
+        canvas.restore();
+        image.dispose();
+        codec.dispose();
+      } catch (_) {
+        canvas.drawPath(path, Paint()..color = asset.backgroundTint..isAntiAlias = true);
+      }
+    } else if (asset.shape.is3D) {
+      final settings = Shape3DSettings.fromColor(asset.effectiveColor).copyWith(
         depth: asset.borderWidth > 2 ? 0.35 : 0.25,
         highlightIntensity: 0.6,
         shadowIntensity: 0.4,
       );
-      Shape3DRenderer.render(
-        _shapeTo3D(asset.shape),
-        canvas,
-        Size(width, height),
-        settings,
-      );
+      Shape3DRenderer.render(_shapeTo3D(asset.shape), canvas, Size(width, height), settings);
     } else {
-      final path = ShapeRenderer.render(
-        asset.shape,
-        Size(width, height),
-        roundedness: 0.5,
-      );
-
-      // ⭐ إذا كان هناك تدرج → استخدمه
       if (asset.gradient != null) {
         final bounds = path.getBounds();
         final paint = Paint()
@@ -54,23 +72,19 @@ class AssetGeneratorService {
           ..isAntiAlias = true;
         canvas.drawPath(path, paint);
       } else {
-        final fillPaint = Paint()
-          ..color = asset.backgroundTint
-          ..style = PaintingStyle.fill
-          ..isAntiAlias = true;
-        canvas.drawPath(path, fillPaint);
-      }
-
-      if (asset.borderWidth > 0) {
-        final borderPaint = Paint()
-          ..color = asset.borderColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = asset.borderWidth
-          ..isAntiAlias = true;
-        canvas.drawPath(path, borderPaint);
+        canvas.drawPath(
+          path,
+          Paint()..color = asset.backgroundTint..style = PaintingStyle.fill..isAntiAlias = true,
+        );
       }
     }
 
+    if (asset.borderWidth > 0 && !asset.shape.is3D) {
+      canvas.drawPath(
+        path,
+        Paint()..color = asset.borderColor..style = PaintingStyle.stroke..strokeWidth = asset.borderWidth..isAntiAlias = true,
+      );
+    }
     return _pictureToPng(recorder, width.toInt(), height.toInt());
   }
 

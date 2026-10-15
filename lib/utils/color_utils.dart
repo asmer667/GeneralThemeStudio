@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 class ColorUtils {
   ColorUtils._();
 
-  /// تحويل لون إلى HEX (RRGGBBAA)
+  /// FUTO-compatible HEX: #RRGGBB for opaque colors, #RRGGBBAA for transparency.
   static String toHex(Color color) {
     final r = color.red.toRadixString(16).padLeft(2, '0');
     final g = color.green.toRadixString(16).padLeft(2, '0');
     final b = color.blue.toRadixString(16).padLeft(2, '0');
     final a = color.alpha.toRadixString(16).padLeft(2, '0');
-    return '#$r$g$b$a'.toUpperCase();
+    return color.alpha == 255
+        ? '#$r$g$b'.toUpperCase()
+        : '#$r$g$b$a'.toUpperCase();
   }
 
   /// HEX بدون شفافية
@@ -30,7 +32,13 @@ class ColorUtils {
     if (h.length == 6) h = '${h}FF';
     if (h.length == 8) {
       try {
-        return Color(int.parse(h, radix: 16));
+        // FUTO TOML stores alpha last (RRGGBBAA); Flutter Color stores alpha first.
+        final rgba = int.parse(h, radix: 16);
+        final r = (rgba >> 24) & 0xFF;
+        final g = (rgba >> 16) & 0xFF;
+        final b = (rgba >> 8) & 0xFF;
+        final a = rgba & 0xFF;
+        return Color((a << 24) | (r << 16) | (g << 8) | b);
       } catch (_) {
         return const Color(0xFF000000);
       }

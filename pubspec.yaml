@@ -50,6 +50,7 @@ flutter:
 
   assets:
     - assets/fonts/
+    - assets/backgrounds/
     - assets/shapes/
     - assets/previews/
     - assets/svg_shapes/

@@ -34,7 +34,7 @@ class GeneralThemeStudioApp extends StatelessWidget {
       child: Consumer<SettingsProvider>(
         builder: (context, settings, _) {
           return MaterialApp(
-            title: 'General Theme Studio',
+            title: 'FutoThemeStudio',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

@@ -17,6 +17,8 @@ class KeyWidget extends StatelessWidget {
   final double width;
   final double height;
   final double fontSize;
+  final String? fontFamily;
+  final String? backgroundImagePath;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final bool isPressed;
@@ -35,6 +37,8 @@ class KeyWidget extends StatelessWidget {
     this.width = 44,
     this.height = 48,
     this.fontSize = 16,
+    this.fontFamily,
+    this.backgroundImagePath,
     this.onTap,
     this.onLongPress,
     this.isPressed = false,
@@ -53,6 +57,7 @@ class KeyWidget extends StatelessWidget {
         label!,
         style: TextStyle(
           color: foregroundColor,
+          fontFamily: fontFamily,
           fontSize: fontSize,
           fontWeight: FontWeight.w600,
           height: 1.1,
@@ -73,6 +78,7 @@ class KeyWidget extends StatelessWidget {
       roundedness: roundedness,
       width: width,
       height: height,
+      backgroundImagePath: backgroundImagePath,
       child: keyContent,
     );
 
@@ -138,6 +144,8 @@ class KeyRow extends StatelessWidget {
             width: keys[i].width,
             height: keys[i].height,
             fontSize: keys[i].fontSize,
+            fontFamily: keys[i].fontFamily,
+            backgroundImagePath: keys[i].backgroundImagePath,
             isPressed: keys[i].isPressed,
           ),
           if (i < keys.length - 1) SizedBox(width: spacing),
@@ -160,6 +168,8 @@ class KeyData {
   final double width;
   final double height;
   final double fontSize;
+  final String? fontFamily;
+  final String? backgroundImagePath;
   final bool isPressed;
 
   const KeyData({
@@ -174,6 +184,8 @@ class KeyData {
     this.width = 44,
     this.height = 48,
     this.fontSize = 16,
+    this.fontFamily,
+    this.backgroundImagePath,
     this.isPressed = false,
   });
 
@@ -187,6 +199,8 @@ class KeyData {
     double width = 44,
     double height = 48,
     double fontSize = 16,
+    String? fontFamily,
+    String? backgroundImagePath,
     Color borderColor = Colors.transparent,
     double borderWidth = 0,
   }) {
@@ -200,6 +214,8 @@ class KeyData {
       width: width,
       height: height,
       fontSize: fontSize,
+      fontFamily: fontFamily,
+      backgroundImagePath: backgroundImagePath,
       borderColor: borderColor,
       borderWidth: borderWidth,
     );
@@ -214,6 +230,8 @@ class KeyData {
     double width = 44,
     double height = 48,
     double fontSize = 16,
+    String? fontFamily,
+    String? backgroundImagePath,
     Color borderColor = Colors.transparent,
     double borderWidth = 0,
   }) {
@@ -226,6 +244,8 @@ class KeyData {
       width: width,
       height: height,
       fontSize: fontSize,
+      fontFamily: fontFamily,
+      backgroundImagePath: backgroundImagePath,
       borderColor: borderColor,
       borderWidth: borderWidth,
     );

@@ -70,16 +70,25 @@ class BackgroundsTab extends StatelessWidget {
                   intensity: 0.4,
                 ),
               ),
-              child: current?.type == BackgroundType.image &&
+              child: (current?.type == BackgroundType.image ||
+                          current?.type == BackgroundType.builtin) &&
                       current?.imagePath != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        File(current!.imagePath!),
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.image, color: Colors.white),
-                      ),
+                      child: current!.type == BackgroundType.builtin &&
+                              current.imagePath!.startsWith('assets/')
+                          ? Image.asset(
+                              current.imagePath!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.image, color: Colors.white),
+                            )
+                          : Image.file(
+                              File(current.imagePath!),
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.image, color: Colors.white),
+                            ),
                     )
                   : null,
             ),
@@ -127,16 +136,14 @@ class BackgroundsTab extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         glowColor: AppColors.neonGreen,
         onTap: () async {
-          await Navigator.push(
+          final downloaded = await Navigator.push<BackgroundAsset>(
             context,
             MaterialPageRoute(
-              builder: (_) => OnlineWallpapersScreen(
-                onWallpaperSelected: (bg) {
-                  provider.updateBackground(bg);
-                },
-              ),
+              builder: (_) => const OnlineWallpapersScreen(),
             ),
           );
+          if (!context.mounted || downloaded == null) return;
+          await _onBackgroundSelected(context, provider, downloaded);
         },
         child: Row(
           children: [
@@ -205,6 +212,7 @@ class BackgroundsTab extends StatelessWidget {
       context,
       itemName: bg.name,
       previewColor: bg.solidColor,
+      previewBackground: bg,
       previewWidget: const SizedBox.shrink(),
       allowKeys: false,
     );
@@ -217,7 +225,7 @@ class BackgroundsTab extends StatelessWidget {
       selection: selection,
     );
 
-    provider.loadProject(updated);
+    provider.replaceProject(updated);
 
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

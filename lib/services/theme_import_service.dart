@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
 import '../core/constants.dart';
+import '../models/background_asset.dart';
 import '../models/border_asset.dart';
 import '../models/icon_asset.dart';
 import '../models/key_group.dart';
 import '../models/theme_project.dart';
 import '../utils/color_utils.dart';
+import 'background_service.dart';
+import 'font_download_service.dart';
 import 'zip_service.dart';
 
 /// خدمة استيراد الثيمات
@@ -29,7 +33,7 @@ class ThemeImportService {
       throw Exception('لم يتم العثور على theme.txt');
     }
 
-    final themeText = String.fromCharCodes(themeBytes);
+    final themeText = utf8.decode(themeBytes, allowMalformed: true);
     final parsed = _parseToml(themeText);
 
     return _buildProject(parsed, contents);
@@ -64,10 +68,16 @@ class ThemeImportService {
       if (line.startsWith('[') && line.endsWith(']')) {
         final sectionName = line.substring(1, line.length - 1);
         currentSection = sectionName;
-        if (!result.containsKey(sectionName)) {
-          result[sectionName] = <String, dynamic>{};
+        if (sectionName.startsWith('options.')) {
+          final options = result.putIfAbsent('options', () => <String, dynamic>{}) as Map<String, dynamic>;
+          final childName = sectionName.substring('options.'.length);
+          currentSectionValue = options.putIfAbsent(childName, () => <String, dynamic>{});
+        } else {
+          if (!result.containsKey(sectionName)) {
+            result[sectionName] = <String, dynamic>{};
+          }
+          currentSectionValue = result[sectionName];
         }
-        currentSectionValue = result[sectionName];
         continue;
       }
 
@@ -125,6 +135,43 @@ class ThemeImportService {
     }
 
     final options = parsed['options'] as Map<String, dynamic>? ?? {};
+    final fontOptions = options['font'] as Map<String, dynamic>? ??
+        parsed['options.font'] as Map<String, dynamic>? ?? const <String, dynamic>{};
+    final backgroundOptions = options['background'] as Map<String, dynamic>? ??
+        parsed['options.background'] as Map<String, dynamic>? ?? const <String, dynamic>{};
+
+    String? importedFontName;
+    String? importedFontPath;
+    final fontFileName = fontOptions['font'] as String?;
+    final fontBytes = fontFileName == null ? null : contents[fontFileName] ?? contents['font.ttf'];
+    if (fontBytes != null && fontBytes.isNotEmpty) {
+      try {
+        final fontDir = await FontDownloadService.getFontsDir();
+        final fontFile = File('${fontDir.path}/Imported_Font.ttf');
+        await fontFile.writeAsBytes(fontBytes, flush: true);
+        importedFontName = 'Imported Font';
+        importedFontPath = fontFile.path;
+      } catch (_) {}
+    }
+
+    BackgroundAsset? importedBackground;
+    final backgroundFileName = backgroundOptions['image'] as String? ??
+        parsed['background_image'] as String?;
+    final backgroundBytes = backgroundFileName == null
+        ? contents['background.png']
+        : contents[backgroundFileName] ?? contents['background.png'];
+    if (backgroundBytes != null && backgroundBytes.isNotEmpty) {
+      try {
+        final backgroundDir = await BackgroundService.getBackgroundsDir();
+        final backgroundFile = File('${backgroundDir.path}/imported_${DateTime.now().millisecondsSinceEpoch}.png');
+        await backgroundFile.writeAsBytes(backgroundBytes, flush: true);
+        importedBackground = BackgroundAsset.image(
+          name: 'خلفية مستوردة',
+          path: backgroundFile.path,
+          opacity: (backgroundOptions['opacity'] as num?)?.toDouble() ?? 1.0,
+        );
+      } catch (_) {}
+    }
 
     return ThemeProject(
       id: id,
@@ -181,6 +228,9 @@ class ThemeImportService {
       autoBorders: (options['auto_borders'] as bool?) ?? true,
       centerHints: (options['center_hints'] as bool?) ?? false,
       groups: _buildGroups(parsed),
+      fontName: importedFontName,
+      fontPath: importedFontPath,
+      backgroundAsset: importedBackground,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );

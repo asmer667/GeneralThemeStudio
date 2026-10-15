@@ -136,38 +136,13 @@ class FontDownloadService {
     }
   }
 
-  /// تنزيل خط بطريقة بديلة (fallback)
+  /// تنزيل الخط من رابط TTF/OTF حقيقي. لا نبني روابط تخمينية لأن أسماء ملفات
+  /// Google Fonts وإصداراتها تختلف من عائلة إلى أخرى.
   static Future<DownloadResult> downloadWithFallback(
     GoogleFont font, {
     void Function(int received, int total)? onProgress,
   }) async {
-    // المحاولة 1: من Google CSS
-    final r1 = await download(font, onProgress: onProgress);
-    if (r1.success) return r1;
-
-    // المحاولة 2: من gstatic مباشر
-    try {
-      final family = font.family.replaceAll(' ', '');
-      final url = 'https://fonts.gstatic.com/s/${family.toLowerCase()}/v1/${family}-Regular.ttf';
-
-      final target = await getFontFile(font.family);
-      await _dio.download(url, target.path, onReceiveProgress: onProgress);
-
-      if (await target.exists()) {
-        final size = await target.length();
-        if (size > 1024) {
-          return DownloadResult(
-            success: true,
-            filePath: target.path,
-            sizeBytes: size,
-          );
-        }
-      }
-    } catch (e) {
-      debugPrint('Fallback download error: $e');
-    }
-
-    return const DownloadResult(success: false, error: 'فشلت كل المحاولات');
+    return download(font, onProgress: onProgress);
   }
 
   // ═══════════════════════════════════════════

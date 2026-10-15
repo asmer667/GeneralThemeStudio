@@ -44,19 +44,40 @@ class GoogleFontsApi {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = response.data;
+        final raw = response.data;
+        final Map<String, dynamic> data = raw is String
+            ? jsonDecode(raw) as Map<String, dynamic>
+            : Map<String, dynamic>.from(raw as Map);
         final fonts = <GoogleFont>[];
-
-        data.forEach((key, value) {
-          try {
-            fonts.add(GoogleFont.fromGoogleFontsComplete(key, value));
-          } catch (e) {
-            // تجاهل الخطوط غير الصالحة
+        final items = data['items'];
+        if (items is List) {
+          for (final item in items) {
+            try {
+              if (item is Map) {
+                fonts.add(GoogleFont.fromJson(Map<String, dynamic>.from(item)));
+              }
+            } catch (_) {
+              // Ignore malformed catalog entries and keep the rest.
+            }
           }
-        });
+        } else {
+          data.forEach((key, value) {
+            try {
+              if (value is Map) {
+                fonts.add(GoogleFont.fromGoogleFontsComplete(
+                  key.toString(), Map<String, dynamic>.from(value),
+                ));
+              }
+            } catch (_) {
+              // Ignore malformed catalog entries and keep the rest.
+            }
+          });
+        }
 
-        _cachedFonts = fonts;
-        return fonts;
+        if (fonts.isNotEmpty) {
+          _cachedFonts = fonts;
+          return fonts;
+        }
       }
     } catch (e) {
       debugPrint('GoogleFontsApi error: $e');
@@ -117,6 +138,12 @@ class GoogleFontsApi {
     GoogleFont font, {
     String weight = '400',
   }) async {
+    // Prefer a real static TTF/OTF file URL from the catalog. The Google CSS API
+    // commonly returns WOFF2, which Flutter's FontLoader cannot load directly.
+    final exact = font.files[weight] ?? font.files['regular'];
+    if (exact != null && _isSupportedFontUrl(exact)) return exact;
+    final supported = font.files.values.where(_isSupportedFontUrl);
+    if (supported.isNotEmpty) return supported.first;
     try {
       final family = font.family.replaceAll(' ', '+');
       final url = '$_fontsCssUrl?family=$family:$weight&display=swap';
@@ -133,7 +160,7 @@ class GoogleFontsApi {
 
       final css = response.data as String;
       // استخراج رابط TTF من CSS
-      final regex = RegExp(r'url\((https://[^)]+\.(?:ttf|woff2?))\)');
+      final regex = RegExp(r'url\((https://[^)]+\.(?:ttf|otf))\)', caseSensitive: false);
       final match = regex.firstMatch(css);
 
       if (match != null) {
@@ -146,14 +173,21 @@ class GoogleFontsApi {
     }
   }
 
-  /// Fallback - قائمة ثابتة للخطوط الشائعة
+  static bool _isSupportedFontUrl(String value) {
+    final uri = Uri.tryParse(value);
+    if (uri == null || !uri.hasScheme || (uri.scheme != 'https' && uri.scheme != 'http')) return false;
+    final path = uri.path.toLowerCase();
+    return path.endsWith('.ttf') || path.endsWith('.otf');
+  }
+
+  /// Fallback - قائمة ثابتة للخطوط المتاحة فعلياً
   static List<GoogleFont> _fallbackFonts() {
     final builtIn = FontsCatalog.fonts;
     return builtIn.map((f) => GoogleFont(
       family: f.family,
       category: 'sans-serif',
       variants: const ['regular'],
-      subsets: f.language == 'ar' ? const ['arabic'] : const ['latin'],
+      subsets: f.isArabic ? const ['arabic', 'latin'] : const ['latin'],
       version: 'v1',
       lastModified: DateTime.now().toIso8601String(),
     )).toList();
@@ -168,6 +202,7 @@ class GoogleFont {
   final List<String> subsets;
   final String version;
   final String lastModified;
+  final Map<String, String> files;
 
   const GoogleFont({
     required this.family,
@@ -176,6 +211,7 @@ class GoogleFont {
     required this.subsets,
     required this.version,
     required this.lastModified,
+    this.files = const {},
   });
 
   /// بناء من API response
@@ -187,6 +223,7 @@ class GoogleFont {
       subsets: List<String>.from(json['subsets'] ?? ['latin']),
       version: json['version'] as String? ?? 'v1',
       lastModified: json['lastModified'] as String? ?? '',
+      files: _readFiles(json['files']),
     );
   }
 
@@ -194,33 +231,55 @@ class GoogleFont {
   factory GoogleFont.fromGoogleFontsComplete(String family, dynamic data) {
     final variants = <String>[];
     final subsets = <String>[];
+    String category = 'sans-serif';
+    dynamic rawFiles;
 
-    if (data is Map<String, dynamic>) {
+    if (data is Map) {
       final variantsData = data['variants'];
-      if (variantsData is Map) {
-        variantsData.forEach((key, _) {
-          variants.add(key.toString());
-        });
+      if (variantsData is Iterable) {
+        variants.addAll(variantsData.map((v) => v.toString()));
+      } else if (variantsData is Map) {
+        variantsData.forEach((key, _) => variants.add(key.toString()));
       }
       final subsetsData = data['subsets'];
-      if (subsetsData is Map) {
-        subsetsData.forEach((key, _) {
-          subsets.add(key.toString());
-        });
+      if (subsetsData is Iterable) {
+        subsets.addAll(subsetsData.map((v) => v.toString()));
+      } else if (subsetsData is Map) {
+        subsetsData.forEach((key, _) => subsets.add(key.toString()));
       }
-      if (subsets.isEmpty) {
-        subsets.add('latin');
-      }
+      final candidate = data['category'];
+      if (candidate is String) category = candidate;
+      rawFiles = data['files'] ?? variantsData;
     }
+    if (subsets.isEmpty) subsets.add('latin');
 
     return GoogleFont(
       family: family,
-      category: data is Map ? (data['category'] ?? 'sans-serif') : 'sans-serif',
-      variants: variants.isEmpty ? ['regular'] : variants,
+      category: category,
+      variants: variants.isEmpty ? const ['regular'] : variants,
       subsets: subsets,
-      version: 'v1',
-      lastModified: DateTime.now().toIso8601String(),
+      version: data is Map && data['version'] is String ? data['version'] as String : 'v1',
+      lastModified: data is Map && data['lastModified'] is String
+          ? data['lastModified'] as String
+          : DateTime.now().toIso8601String(),
+      files: _readFiles(rawFiles),
     );
+  }
+
+  static Map<String, String> _readFiles(dynamic raw) {
+    if (raw is! Map) return const {};
+    final result = <String, String>{};
+    raw.forEach((key, value) {
+      String? url;
+      if (value is String) {
+        url = value;
+      } else if (value is Map) {
+        final candidate = value['url'] ?? value['file'] ?? value['path'];
+        if (candidate is String) url = candidate;
+      }
+      if (url != null && url.startsWith('http')) result[key.toString()] = url;
+    });
+    return result;
   }
 
   /// هل الخط يدعم العربية؟
