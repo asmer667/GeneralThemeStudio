@@ -1,12 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 /// نوع الخلفية
 enum BackgroundType {
-  color,        // لون ثابت
-  gradient,     // تدرج
-  image,        // صورة من الجهاز
-  builtin,      // خلفية مدمجة
-  mesh,         // شبكة متعددة الألوان
+  color,
+  gradient,
+  image,
+  builtin,
+  mesh,
 }
 
 extension BackgroundTypeExt on BackgroundType {
@@ -47,17 +49,13 @@ class BackgroundAsset {
   final String name;
   final BackgroundType type;
 
-  // للون الثابت
   final Color? solidColor;
 
-  // للتدرج
   final List<Color>? gradientColors;
   final double gradientAngle;
 
-  // للصورة
   final String? imagePath;
 
-  // للتكرار
   final bool repeatImage;
   final double opacity;
   final double blurAmount;
@@ -161,9 +159,9 @@ class BackgroundAsset {
         'id': id,
         'name': name,
         'type': type.name,
-        'solidColor': solidColor?.toARGB32(),
+        'solidColor': solidColor?.value,
         'gradientColors':
-            gradientColors?.map((c) => c.toARGB32()).toList(),
+            gradientColors?.map((c) => c.value).toList(),
         'gradientAngle': gradientAngle,
         'imagePath': imagePath,
         'repeatImage': repeatImage,
@@ -177,7 +175,7 @@ class BackgroundAsset {
       name: json['name'] as String,
       type: BackgroundType.values.firstWhere(
         (t) => t.name == json['type'],
-        orElse: () => BackgroundType.solidColor,
+        orElse: () => BackgroundType.color,
       ),
       solidColor:
           json['solidColor'] != null ? Color(json['solidColor'] as int) : null,
@@ -194,7 +192,6 @@ class BackgroundAsset {
     );
   }
 
-  /// توليد تدرج Flutter من الإعدادات
   LinearGradient? toLinearGradient() {
     if (type != BackgroundType.gradient || gradientColors == null) {
       return null;
@@ -207,21 +204,10 @@ class BackgroundAsset {
   }
 
   Alignment _angleToAlignment(double angleDegrees) {
-    final radians = angleDegrees * (3.141592653589793 / 180);
-    final x = 0.5 + 0.5 * _cos(radians);
-    final y = 0.5 + 0.5 * _sin(radians);
+    final radians = angleDegrees * (math.pi / 180);
+    final x = 0.5 + 0.5 * math.cos(radians);
+    final y = 0.5 + 0.5 * math.sin(radians);
     return Alignment(x * 2 - 1, y * 2 - 1);
-  }
-
-  double _cos(double x) {
-    // Taylor series approximation
-    final x2 = x * x;
-    return 1 - x2 / 2 + x2 * x2 / 24 - x2 * x2 * x2 / 720;
-  }
-
-  double _sin(double x) {
-    final x2 = x * x;
-    return x - x2 * x / 6 + x2 * x2 * x / 120 - x2 * x2 * x2 * x / 5040;
   }
 }
 
@@ -230,7 +216,6 @@ class BuiltinBackgrounds {
   BuiltinBackgrounds._();
 
   static List<BackgroundAsset> get all => [
-        // تدرجات
         BackgroundAsset.gradient(
           name: 'Aurora',
           colors: const [
@@ -302,8 +287,6 @@ class BuiltinBackgrounds {
           ],
           angle: 45,
         ),
-
-        // ألوان ثابتة
         BackgroundAsset.solid(
           name: 'أسود',
           color: const Color(0xFF000000),
