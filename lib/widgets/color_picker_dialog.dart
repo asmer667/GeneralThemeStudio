@@ -44,11 +44,12 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   void initState() {
     super.initState();
-    _r = widget.initialColor.r * 255;
-    _g = widget.initialColor.g * 255;
-    _b = widget.initialColor.b * 255;
-    _a = widget.initialColor.a * 255;
-    _hexController = TextEditingController(text: ColorUtils.toHex(_currentColor));
+    _r = widget.initialColor.red.toDouble();
+    _g = widget.initialColor.green.toDouble();
+    _b = widget.initialColor.blue.toDouble();
+    _a = widget.initialColor.alpha.toDouble();
+    _hexController =
+        TextEditingController(text: ColorUtils.toHex(_currentColor));
   }
 
   @override
@@ -67,20 +68,20 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   void _updateFromHex(String hex) {
     final parsed = ColorUtils.fromHex(hex);
     setState(() {
-      _r = parsed.r * 255;
-      _g = parsed.g * 255;
-      _b = parsed.b * 255;
-      _a = parsed.a * 255;
+      _r = parsed.red.toDouble();
+      _g = parsed.green.toDouble();
+      _b = parsed.blue.toDouble();
+      _a = parsed.alpha.toDouble();
       _hexError = null;
     });
   }
 
   void _applyPreset(Color color) {
     setState(() {
-      _r = color.r * 255;
-      _g = color.g * 255;
-      _b = color.b * 255;
-      _a = color.a * 255;
+      _r = color.red.toDouble();
+      _g = color.green.toDouble();
+      _b = color.blue.toDouble();
+      _a = color.alpha.toDouble();
       _hexController.text = ColorUtils.toHex(color);
       _hexError = null;
     });
@@ -97,7 +98,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
         side: BorderSide(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: Colors.white.withOpacity(0.1),
           width: 1,
         ),
       ),
@@ -141,12 +142,12 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             color: _currentColor,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: Colors.white.withOpacity(0.3),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: _currentColor.withValues(alpha: 0.5),
+                color: _currentColor.withOpacity(0.5),
                 blurRadius: 10,
               ),
             ],
@@ -179,12 +180,12 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         color: _currentColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.2),
+          color: Colors.white.withOpacity(0.2),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: _currentColor.withValues(alpha: 0.5),
+            color: _currentColor.withOpacity(0.5),
             blurRadius: 20,
             spreadRadius: 2,
           ),
@@ -239,13 +240,13 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
                   border: Border.all(
                     color: isSelected
                         ? Colors.white
-                        : Colors.white.withValues(alpha: 0.2),
+                        : Colors.white.withOpacity(0.2),
                     width: isSelected ? 2.5 : 1,
                   ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: c.withValues(alpha: 0.6),
+                            color: c.withOpacity(0.6),
                             blurRadius: 12,
                           ),
                         ]
@@ -310,11 +311,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         suffixIcon: IconButton(
           icon: const Icon(Icons.check, size: 18),
           onPressed: () {
-            if (ColorUtils.fromHex(_hexController.text).a >= 0) {
-              _updateFromHex(_hexController.text);
-            } else {
-              setState(() => _hexError = 'صيغة غير صحيحة');
-            }
+            _updateFromHex(_hexController.text);
           },
         ),
       ),
@@ -366,7 +363,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: color,
               thumbColor: color,
-              overlayColor: color.withValues(alpha: 0.2),
+              overlayColor: color.withOpacity(0.2),
             ),
             child: Slider(
               value: value,
@@ -424,12 +421,12 @@ class ColorSwatchButton extends StatelessWidget {
               color: color,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.25),
+                color: Colors.white.withOpacity(0.25),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: color.withValues(alpha: 0.4),
+                  color: color.withOpacity(0.4),
                   blurRadius: 12,
                   spreadRadius: 1,
                 ),
