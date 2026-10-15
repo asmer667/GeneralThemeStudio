@@ -1,29 +1,20 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../data/fonts/fonts_catalog.dart';
 import 'font_download_service.dart';
 import 'google_fonts_api.dart';
 
 /// خدمة إدارة الخطوط الموحّدة
-///
-/// المصادر:
-/// - خطوط مدمجة (من assets/fonts/)
-/// - خطوط Google (تصفح + تنزيل + تخزين محلي)
-/// - خطوط مخصصة (رفع من الجهاز)
 class FontService {
   FontService._();
 
-  // ═══════════════════════════════════════════
-  // All Fonts
-  // ═══════════════════════════════════════════
+  // ═══ All Fonts ═══
 
-  /// كل الخطوط المتاحة:
-  /// - المدمجة
-  /// - المنزّلة من Google
-  /// - المخصصة (المرفوعة)
   static Future<AllFonts> loadAllFonts() async {
     final builtIn = FontsCatalog.fonts;
 
@@ -46,38 +37,28 @@ class FontService {
     );
   }
 
-  // ═══════════════════════════════════════════
-  // Built-in
-  // ═══════════════════════════════════════════
+  // ═══ Built-in ═══
 
   static List<BuiltInFont> get builtInFonts => FontsCatalog.fonts;
   static List<BuiltInFont> get arabicBuiltIn => FontsCatalog.arabicFonts;
   static List<BuiltInFont> get englishBuiltIn => FontsCatalog.englishFonts;
 
-  // ═══════════════════════════════════════════
-  // Google Fonts (Browse)
-  // ═══════════════════════════════════════════
+  // ═══ Google Fonts (Browse) ═══
 
-  /// كل خطوط Google (2000+)
   static Future<List<GoogleFont>> loadGoogleFonts({bool refresh = false}) async {
     return GoogleFontsApi.fetchAllFonts(forceRefresh: refresh);
   }
 
-  /// الخطوط العربية من Google
   static Future<List<GoogleFont>> loadGoogleArabicFonts() async {
     return GoogleFontsApi.fetchArabicFonts();
   }
 
-  /// بحث في Google Fonts
   static Future<List<GoogleFont>> searchGoogle(String query) async {
     return GoogleFontsApi.search(query);
   }
 
-  // ═══════════════════════════════════════════
-  // Download
-  // ═══════════════════════════════════════════
+  // ═══ Download ═══
 
-  /// تنزيل خط من Google
   static Future<DownloadResult> downloadGoogleFont(
     GoogleFont font, {
     void Function(int received, int total)? onProgress,
@@ -88,28 +69,22 @@ class FontService {
     );
 
     if (result.success) {
-      // حمّله كـ FontLoader فوراً
       await loadFontForPreview(font.family, result.filePath!);
     }
 
     return result;
   }
 
-  /// هل الخط منزّل؟
   static Future<bool> isFontDownloaded(String family) {
     return FontDownloadService.isDownloaded(family);
   }
 
-  /// حذف خط منزّل
   static Future<bool> deleteDownloadedFont(String family) {
     return FontDownloadService.delete(family);
   }
 
-  // ═══════════════════════════════════════════
-  // Custom Fonts (User Upload)
-  // ═══════════════════════════════════════════
+  // ═══ Custom Fonts (User Upload) ═══
 
-  /// رفع خط مخصص من ملف
   static Future<CustomFontInfo> addCustomFont(File file) async {
     final appDir = await FontDownloadService.getFontsDir();
     final customDir = Directory('${appDir.path}/custom');
@@ -140,24 +115,23 @@ class FontService {
       final customDir = Directory('${appDir.path}/custom');
       if (!await customDir.exists()) return [];
 
-      final files = await customDir.list().where((e) {
-        if (e is! File) return false;
+      final entities = await customDir.list().toList();
+      final files = entities.whereType<File>().where((e) {
         final ext = e.path.split('.').last.toLowerCase();
         return ['ttf', 'otf', 'woff', 'woff2'].contains(ext);
       }).toList();
 
       final result = <CustomFontInfo>[];
       for (final f in files) {
-        if (f is File) {
-          final stat = await f.stat();
-          final name = f.uri.pathSegments.last.replaceAll(RegExp(r'\.(ttf|otf|woff2?)$'), '');
-          result.add(CustomFontInfo(
-            family: name,
-            filePath: f.path,
-            sizeBytes: stat.size,
-            addedAt: stat.modified,
-          ));
-        }
+        final stat = await f.stat();
+        final name =
+            f.uri.pathSegments.last.replaceAll(RegExp(r'\.(ttf|otf|woff2?)$'), '');
+        result.add(CustomFontInfo(
+          family: name,
+          filePath: f.path,
+          sizeBytes: stat.size,
+          addedAt: stat.modified,
+        ));
       }
       return result;
     } catch (_) {
@@ -182,11 +156,8 @@ class FontService {
     }
   }
 
-  // ═══════════════════════════════════════════
-  // Load for Preview
-  // ═══════════════════════════════════════════
+  // ═══ Load for Preview ═══
 
-  /// تحميل خط في الذاكرة للمعاينة الفورية
   static Future<bool> loadFontForPreview(String family, String filePath) async {
     try {
       final file = File(filePath);
@@ -206,7 +177,6 @@ class FontService {
     }
   }
 
-  /// تحميل كل الخطوط المنزّلة
   static Future<void> loadAllDownloadedFonts() async {
     final downloaded = await FontDownloadService.listDownloaded();
     for (final d in downloaded) {
@@ -214,11 +184,8 @@ class FontService {
     }
   }
 
-  // ═══════════════════════════════════════════
-  // Font File for Export
-  // ═══════════════════════════════════════════
+  // ═══ Font File for Export ═══
 
-  /// الحصول على ملف الخط للتصدير
   static Future<File?> getFontFileForExport(String family) async {
     // 1. خط منزّل
     final downloaded = await FontDownloadService.getFontFile(family);
@@ -250,9 +217,7 @@ class FontService {
     }
   }
 
-  // ═══════════════════════════════════════════
-  // Stats
-  // ═══════════════════════════════════════════
+  // ═══ Stats ═══
 
   static Future<FontStats> getStats() async {
     final downloaded = await FontDownloadService.listDownloaded();
@@ -270,9 +235,7 @@ class FontService {
     );
   }
 
-  // ═══════════════════════════════════════════
-  // Validation
-  // ═══════════════════════════════════════════
+  // ═══ Validation ═══
 
   static bool isValidExtension(String path) {
     final ext = path.split('.').last.toLowerCase();
@@ -280,13 +243,11 @@ class FontService {
   }
 
   static bool isValidSize(int bytes) {
-    return bytes <= 8 * 1024 * 1024; // 8 MB
+    return bytes <= 8 * 1024 * 1024;
   }
 }
 
-// ═══════════════════════════════════════════
-// Models
-// ═══════════════════════════════════════════
+// ═══ Models ═══
 
 class AllFonts {
   final List<BuiltInFont> builtIn;
